@@ -1,0 +1,51 @@
+import type { unstable_RSCRouteConfig as RSCRouteConfig } from "react-router";
+
+export function routes() {
+  return [
+    {
+      id: "root",
+      path: "",
+      lazy: () => import("./root/route"),
+      children: [
+        {
+          id: "marketing",
+          lazy: () => import("./marketing/route"),
+          children: [
+            {
+              id: "marketing.home",
+              index: true,
+              lazy: () => import("./marketing/home/route"),
+            },
+            {
+              id: "marketing.login",
+              path: "login",
+              lazy: () => import("./marketing/login/route"),
+            },
+            {
+              id: "marketing.signup",
+              path: "signup",
+              lazy: () => import("./marketing/signup/route"),
+            },
+          ],
+        },
+        {
+          id: "app",
+          path: "app",
+          lazy: () => import("./app/route"),
+          children: [
+            {
+              id: "app.home",
+              index: true,
+              lazy: () => import("./app/home/route"),
+            },
+            {
+              id: "app.rest",
+              path: "*",
+              lazy: () => import("./app/home/route"),
+            },
+          ],
+        },
+      ],
+    },
+  ] satisfies RSCRouteConfig;
+}

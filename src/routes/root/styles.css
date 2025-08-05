@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui" {
+  themes: silk --default, dim --prefersdark;
+}
+
+@layer base {
+  * {
+    @apply border-base-300 outline-primary/50;
+  }
+}
