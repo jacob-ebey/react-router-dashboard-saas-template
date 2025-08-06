@@ -38,6 +38,9 @@ importers:
       compression:
         specifier: 1.8.1
         version: 1.8.1
+      drizzle-kit:
+        specifier: 0.31.4
+        version: 0.31.4
       drizzle-orm:
         specifier: 0.44.4
         version: 0.44.4(@libsql/client@0.15.10)(@types/pg@8.15.5)(pg@8.16.3)
@@ -105,9 +108,6 @@ importers:
       dotenv-cli:
         specifier: 10.0.0
         version: 10.0.0
-      drizzle-kit:
-        specifier: 0.31.4
-        version: 0.31.4
       embedded-postgres:
         specifier: 17.5.0-beta.15
         version: 17.5.0-beta.15
