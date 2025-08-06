@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  isRouteErrorResponse,
-  useNavigation,
-  useRouteError,
-} from "react-router";
+import { isRouteErrorResponse, useRouteError } from "react-router";
 
 function focusFirstInputAfterAnimation(modal: HTMLDialogElement) {
   setTimeout(() => {

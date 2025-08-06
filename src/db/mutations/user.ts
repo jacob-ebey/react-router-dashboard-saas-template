@@ -1,5 +1,4 @@
 import { hash } from "bcrypt";
-import { eq, sql } from "drizzle-orm";
 
 import type { Database } from "../index";
 import { passwords, users, type User } from "../schema";
@@ -12,7 +11,7 @@ export async function createUser(
 
   return await db
     .transaction(async (tx) => {
-      const [insertedUser] = await db
+      const [insertedUser] = await tx
         .insert(users)
         .values({
           email,
@@ -20,7 +19,7 @@ export async function createUser(
         })
         .returning();
 
-      await db
+      await tx
         .insert(passwords)
         .values({
           hashedPassword,

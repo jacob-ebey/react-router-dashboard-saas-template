@@ -6,7 +6,7 @@ import { passwords, users, type User } from "../schema";
 
 export async function getUserById(
   db: Database,
-  id: number
+  id: string
 ): Promise<User | undefined> {
   const user = await db.query.users.findFirst({
     where: eq(users.id, id),

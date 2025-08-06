@@ -48,7 +48,6 @@ export async function login(
   const session = getSession();
   session.set("user", {
     id: user.id,
-    publicId: user.publicId,
   });
 
   redirect(validateRedirect(redirectTo, DEFAULT_LOGIN_REDIRECT_PATH));
@@ -86,7 +85,6 @@ export async function signup(
   const session = getSession();
   session.set("user", {
     id: user.id,
-    publicId: user.publicId,
   });
 
   redirect(validateRedirect(redirectTo, DEFAULT_LOGIN_REDIRECT_PATH));

@@ -5,7 +5,7 @@ import { createCookieSessionStorage } from "react-router";
 import { env } from "std-env";
 
 type SessionData = {
-  user?: { id: number; publicId: string };
+  user?: { id: string };
 };
 
 type SessionContext = {
