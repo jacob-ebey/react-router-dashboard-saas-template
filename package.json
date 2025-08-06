@@ -5,7 +5,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "dotenv -- vite",
-    "start": "pnpm db:push && node server.js",
+    "start": "pnpm db:migrate && node server.js",
     "typecheck": "tsc --noEmit",
     "db": "node scripts/start-local-db.ts",
     "db:generate": "drizzle-kit generate",
