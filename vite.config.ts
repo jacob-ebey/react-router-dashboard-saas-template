@@ -9,7 +9,13 @@ export default defineConfig({
   environments: {
     client: {
       optimizeDeps: {
-        include: ["react-router/internal/react-server-client"],
+        include: [
+          "@conform-to/react",
+          "@conform-to/zod/v4",
+          "react",
+          "react-router",
+          "react-router/internal/react-server-client",
+        ],
       },
     },
   },
