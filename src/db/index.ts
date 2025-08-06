@@ -1,5 +1,5 @@
-import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import * as schema from "./schema";
 
 export type Database = ReturnType<typeof drizzle<typeof schema>>;
@@ -17,10 +17,9 @@ export function getDb(): Database {
     return globalThis.DB;
   }
 
-  // Create libSQL client
-  const client = createClient({
-    url: process.env.DATABASE_URL || "file:./local.db",
-    authToken: process.env.DATABASE_AUTH_TOKEN,
+  // Create client
+  const client = new Pool({
+    connectionString: process.env.DATABASE_URL,
   });
 
   return (globalThis.DB = drizzle(client, { schema }));

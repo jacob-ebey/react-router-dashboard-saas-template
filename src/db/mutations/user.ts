@@ -10,34 +10,28 @@ export async function createUser(
 ): Promise<User | undefined> {
   const hashedPassword = await hash(password, 16);
 
-  const [[insertedUser], [insertedPassword]] = await db.batch([
-    db
-      .insert(users)
-      .values({
-        email,
-        name,
-      })
-      .returning(),
-    db
-      .insert(passwords)
-      .values({
-        hashedPassword,
-        userId: sql<number>`last_insert_rowid()`,
-      })
-      .returning({ id: passwords.id }),
-  ]);
+  return await db
+    .transaction(async (tx) => {
+      const [insertedUser] = await db
+        .insert(users)
+        .values({
+          email,
+          name,
+        })
+        .returning();
 
-  if (!insertedPassword && insertedUser) {
-    await db.delete(users).where(eq(users.id, insertedUser.id));
-  }
+      await db
+        .insert(passwords)
+        .values({
+          hashedPassword,
+          userId: insertedUser.id,
+        })
+        .returning({ id: passwords.id });
 
-  if (!insertedUser && insertedPassword) {
-    await db.delete(passwords).where(eq(passwords.id, insertedPassword.id));
-  }
-
-  if (insertedPassword && insertedUser) {
-    return insertedUser;
-  }
-
-  return undefined;
+      return insertedUser;
+    })
+    .catch((error) => {
+      console.error(error);
+      return undefined;
+    });
 }

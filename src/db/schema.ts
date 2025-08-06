@@ -1,35 +1,28 @@
-import { sqliteTable, text, integer, unique } from "drizzle-orm/sqlite-core";
+import { pgTable, uuid, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 // Users table
-export const users = sqliteTable(
+export const users = pgTable(
   "users",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
-    publicId: text("public_id")
-      .notNull()
-      .$defaultFn(() => crypto.randomUUID()),
+    id: uuid("id").primaryKey().defaultRandom(),
     email: text("email").notNull().unique(),
     name: text("name"),
     avatar: text("avatar"),
-    createdAt: integer("created_at", { mode: "timestamp" })
-      .notNull()
-      .$defaultFn(() => new Date()),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [unique("email_idx").on(table.email)]
 );
 
 // Passwords table for email/password logins
-export const passwords = sqliteTable(
+export const passwords = pgTable(
   "passwords",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
-    userId: integer("user_id")
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     hashedPassword: text("hashed_password").notNull(),
-    createdAt: integer("created_at", { mode: "timestamp" })
-      .notNull()
-      .$defaultFn(() => new Date()),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [
     unique("userId_password_idx").on(table.userId, table.hashedPassword),
