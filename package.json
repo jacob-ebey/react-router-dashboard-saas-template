@@ -16,7 +16,6 @@
   "dependencies": {
     "@conform-to/react": "1.8.2",
     "@conform-to/zod": "1.8.2",
-    "@libsql/client": "0.15.10",
     "@radix-ui/react-slot": "1.2.3",
     "@remix-run/node-fetch-server": "0.8.0",
     "@simplewebauthn/server": "13.1.2",
