@@ -5,7 +5,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "dotenv -- vite",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "pnpm db:push && node server.js",
     "typecheck": "tsc --noEmit",
     "db": "node scripts/start-local-db.ts",
     "db:generate": "drizzle-kit generate",
@@ -24,7 +24,6 @@
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "compression": "1.8.1",
-    "cross-env": "10.0.0",
     "drizzle-orm": "0.44.4",
     "express": "5.1.0",
     "pg": "8.16.3",
