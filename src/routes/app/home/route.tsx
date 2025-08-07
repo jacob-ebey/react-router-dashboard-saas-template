@@ -27,8 +27,10 @@ export default async function AppHome() {
       />
 
       <div className="p-4 bg-base-200 min-h-full grid items-center justify-center">
-        {/* Organization Selection */}
-        <OrganizationSelection user={user} organizations={organizations} />
+        <div className="max-w-screen-xl w-full mx-auto grid items-center justify-center min-h-full">
+          {/* Organization Selection */}
+          <OrganizationSelection user={user} organizations={organizations} />
+        </div>
       </div>
     </>
   );

@@ -53,6 +53,11 @@ export function routes() {
                   path: ":orgSlug",
                   lazy: () => import("./app/organization/$orgSlug/route"),
                 },
+                {
+                  id: "app.organization.settings",
+                  path: ":orgSlug/settings",
+                  lazy: () => import("./app/organization/$orgSlug/settings/route"),
+                },
               ],
             },
             {

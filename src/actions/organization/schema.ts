@@ -28,3 +28,38 @@ export const CreateOrganizationFormSchema = z.object({
 export type CreateOrganizationFormData = z.infer<
   typeof CreateOrganizationFormSchema
 >;
+
+export const UpdateOrganizationFormSchema = z.object({
+  name: z
+    .string({ error: "Name is required." })
+    .min(1, "Organization name is required.")
+    .max(255, "Name too long."),
+  address: z.string().optional(),
+  phone: z.string().optional(),
+  email: z
+    .string()
+    .check(z.email({ message: "Please enter a valid email." }))
+    .optional(),
+  website: z
+    .string()
+    .check(z.url({ error: "Please enter a valid website URL." }))
+    .optional(),
+  logoUrl: z
+    .string()
+    .check(z.url({ error: "Please enter a valid logo URL." }))
+    .optional(),
+});
+
+export type UpdateOrganizationFormData = z.infer<
+  typeof UpdateOrganizationFormSchema
+>;
+
+export const DeleteOrganizationFormSchema = z.object({
+  confirmationText: z.literal("DELETE", {
+    error: "Please type DELETE to confirm.",
+  }),
+});
+
+export type DeleteOrganizationFormData = z.infer<
+  typeof DeleteOrganizationFormSchema
+>;

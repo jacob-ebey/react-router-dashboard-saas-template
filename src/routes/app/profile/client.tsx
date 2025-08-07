@@ -39,7 +39,7 @@ function UserInfoSection({ user }: { user: User }) {
   };
 
   return (
-    <div className="card bg-base-200">
+    <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
         <h2 className="card-title">Account Information</h2>
         <div className="grid gap-4">
@@ -84,7 +84,7 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
   });
 
   return (
-    <div className="card bg-base-200">
+    <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
         <h2 className="card-title">Update Name</h2>
         <form {...getFormProps(form)} action={action} className="grid gap-4 mt-4">
@@ -150,7 +150,7 @@ function ChangePasswordForm() {
   });
 
   return (
-    <div className="card bg-base-200">
+    <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
         <h2 className="card-title">Change Password</h2>
         <form {...getFormProps(form)} action={action} className="grid gap-4 mt-4">
@@ -249,7 +249,7 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
   });
 
   return (
-    <div className="card bg-error/10 border-error">
+    <div className="card card-bordered bg-error/10 border-error">
       <div className="card-body">
         <h2 className="card-title text-error">Delete Account</h2>
         <p className="text-sm">
