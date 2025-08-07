@@ -274,7 +274,7 @@ import { localUtility } from "./utils";
 ### Database
 
 - Use parameterized queries (Drizzle handles this)
-- Validate all inputs with Zod schemas
+- Validate all inputs with Zod v4 schemas
 - Use transactions for related operations
 
 ### Performance

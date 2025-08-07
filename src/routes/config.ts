@@ -39,6 +39,11 @@ export function routes() {
               lazy: () => import("./app/home/route"),
             },
             {
+              id: "app.profile",
+              path: "profile",
+              lazy: () => import("./app/profile/route"),
+            },
+            {
               id: "app.rest",
               path: "*",
               lazy: () => import("./app/home/route"),

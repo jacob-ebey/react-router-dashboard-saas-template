@@ -48,6 +48,9 @@ export default function AppLayout({ matches }: RouteComponentProps) {
             </Link>
           </div>
           <div className="navbar-end gap-2">
+            <Link to="/app/profile" className="btn btn-ghost btn-sm">
+              Profile
+            </Link>
             <GloablLoader />
             <LogoutForm />
           </div>
