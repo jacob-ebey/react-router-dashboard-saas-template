@@ -29,7 +29,7 @@ export default function MarketingLayout() {
   return (
     <>
       <div className="bg-base-100 min-h-screen grid grid-rows-[auto_1fr_auto]">
-        <div className="bg-base-200 shadow-lg sticky top-0 z-50">
+        <div className="bg-base-200 shadow-sm sticky top-0 z-50">
           <header
             className="navbar max-w-screen-xl mx-auto"
             aria-label="Navbar"

@@ -22,7 +22,7 @@ export default function AppLayout({ matches }: RouteComponentProps) {
     <>
       <div className="h-screen grid grid-rows-[auto_1fr] max-h-screen">
         <header
-          className="navbar bg-base-200 sticky top-0 z-10 md:relative"
+          className="navbar bg-base-200 shadow-sm sticky top-0 z-10 md:relative"
           aria-label="Navbar"
         >
           <div className="flex-none md:hidden">
@@ -66,7 +66,7 @@ export default function AppLayout({ matches }: RouteComponentProps) {
               id="sidebar"
               className="md:modal-open modal modal-start md:!contents md:!bg-transparent md:h-full"
             >
-              <div className="p-0 modal-box md:!relative md:!translate-0 md:visible md:opacity-100 md:pointer-events-auto w-[90vw] md:w-54 lg:w-64 bg-base-200 md:resize-x md:h-full md:rounded-none md:shadow-none">
+              <div className="p-0 modal-box md:!relative md:!translate-0 md:visible md:opacity-100 md:pointer-events-auto w-[90vw] md:w-54 lg:w-64 bg-base-200 md:resize-x md:h-full md:rounded-none z-10 shadow-sm">
                 <SidebarContent />
               </div>
               <form method="dialog" className="modal-backdrop md:hidden">
