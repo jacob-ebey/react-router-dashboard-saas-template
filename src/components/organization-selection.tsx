@@ -54,7 +54,7 @@ export function OrganizationSelection({
                   {organizations.map((org) => (
                     <Link
                       key={org.id}
-                      to={`/app?org=${org.slug}`}
+                      to={`/app/organization/${org.slug}`}
                       className="block p-4 rounded-lg border border-base-300 hover:border-primary hover:bg-primary/5 transition-colors"
                     >
                       <div className="flex items-center justify-between">

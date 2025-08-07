@@ -44,6 +44,18 @@ export function routes() {
               lazy: () => import("./app/profile/route"),
             },
             {
+              id: "app.organization",
+              path: "organization",
+              lazy: () => import("./app/organization/route"),
+              children: [
+                {
+                  id: "app.organization.detail",
+                  path: ":orgSlug",
+                  lazy: () => import("./app/organization/$orgSlug/route"),
+                },
+              ],
+            },
+            {
               id: "app.rest",
               path: "*",
               lazy: () => import("./app/home/route"),

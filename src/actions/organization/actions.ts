@@ -59,7 +59,7 @@ export async function createOrganizationAction(
     });
 
     // Redirect to the app with the new organization context
-    redirect(`/app?org=${organization.slug}`);
+    redirect(`/app/organization/${organization.slug}`);
 
     return submission.reply({ resetForm: true });
   } catch (error) {
