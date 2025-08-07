@@ -34,7 +34,15 @@ In one tab, start the database server:
 pnpm db
 ```
 
-In another tab, start the development server with HMR:
+In another tab:
+
+Migrate the database:
+
+```bash
+pnpm db:migrate
+```
+
+Start the development server with HMR:
 
 ```bash
 pnpm dev

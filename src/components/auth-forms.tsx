@@ -3,10 +3,10 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition, useActionState } from "react";
+import { useSearchParams } from "react-router";
 
 import { login, logout, signup } from "@/actions/auth/actions";
 import { LoginFormSchema, SignupFormSchema } from "@/actions/auth/schema";
-import { useSearchParams } from "react-router";
 
 export function LogoutForm() {
   const [_, action, pending] = useActionState(logout, undefined);
