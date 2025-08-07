@@ -13,7 +13,7 @@ export function LogoutForm() {
 
   return (
     <form action={action}>
-      <button className="btn btn-error btn-soft btn-sm" type="submit">
+      <button className="btn btn-error btn-soft" type="submit">
         {pending ? (
           <span
             className="loading loading-dots loading-md"
