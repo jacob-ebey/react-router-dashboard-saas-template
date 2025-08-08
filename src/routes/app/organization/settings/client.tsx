@@ -15,12 +15,8 @@ import {
 import { Form, FormErrors, Input, Textarea, useForm } from "@/components/form";
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
-import {
-  closeModal,
-  Modal,
-  ModalContent,
-  openModal,
-} from "@/components/ui/modal";
+import { Modal, ModalContent } from "@/components/ui/modal";
+import { closeModal, openModal } from "@/components/ui/modal-on";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
 
 import { deleteInvitationAndRemoveUser } from "@/actions/invitation/actions";

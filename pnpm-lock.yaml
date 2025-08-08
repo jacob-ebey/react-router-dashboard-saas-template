@@ -48,7 +48,7 @@ importers:
         specifier: 5.1.0
         version: 5.1.0
       isbot:
-        specifier: ^5.1.29
+        specifier: 5.1.29
         version: 5.1.29
       pg:
         specifier: 8.16.3

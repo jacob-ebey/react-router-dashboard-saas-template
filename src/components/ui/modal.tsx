@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
 
-export { closeModal, openModal } from "./modal.client";
-
 export type ModalProps = React.ComponentProps<"dialog"> & {
   clickAwayToClose?: boolean;
   id: string;
