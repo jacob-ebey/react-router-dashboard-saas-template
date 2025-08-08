@@ -189,9 +189,6 @@ export async function acceptInvitation(
       });
     }
 
-    // Redirect to the organization
-    redirect(`/app/organization/${organization.slug}`);
-
     return submission.reply({ resetForm: true });
   } catch (error) {
     if (error instanceof Response) {
@@ -272,7 +269,7 @@ export async function declineInvitation(
 ): Promise<SubmissionResult> {
   const userId = requireUser();
   const db = getDb();
-  
+
   const submission = parseWithZod(formData, {
     schema: AcceptInvitationFormSchema,
   });
@@ -289,9 +286,12 @@ export async function declineInvitation(
         formErrors: ["User not found"],
       });
     }
-    
+
     // Get the invitation
-    const invitation = await getInvitationById(db, submission.value.invitationId);
+    const invitation = await getInvitationById(
+      db,
+      submission.value.invitationId
+    );
     if (!invitation) {
       return submission.reply({
         fieldErrors: {

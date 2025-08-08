@@ -39,6 +39,9 @@ export function InviteUserForm({
   );
 
   const [form, fields] = useForm({
+    defaultValue: {
+      role: "member",
+    },
     lastResult,
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
@@ -77,7 +80,7 @@ export function InviteUserForm({
           <select
             {...getSelectProps(fields.role)}
             className="select w-full"
-            defaultValue={form.initialValue?.role || "member"}
+            defaultValue={form.initialValue?.role}
           >
             <option value="member">Member</option>
             <option value="manager">Manager</option>

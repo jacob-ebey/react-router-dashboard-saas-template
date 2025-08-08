@@ -39,7 +39,7 @@ export default async function OrganizationSettings({
 
   return (
     <>
-      <title>{organization.name} Settings | Organization</title>
+      <title>{`${organization.name} Settings | Organization`}</title>
       <meta
         name="description"
         content={`Settings for ${organization.name} organization`}
