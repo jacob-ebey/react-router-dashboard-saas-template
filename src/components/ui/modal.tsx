@@ -3,12 +3,15 @@ import { cn } from "@/lib/utils";
 export { closeModal, openModal } from "./modal.client";
 
 export type ModalProps = React.ComponentProps<"dialog"> & {
+  clickAwayToClose?: boolean;
   id: string;
   position?: "middle" | "top" | "bottom" | "start" | "end";
 };
 
 export function Modal({
+  children,
   className,
+  clickAwayToClose,
   position = "middle",
   ...props
 }: ModalProps) {
@@ -26,7 +29,14 @@ export function Modal({
         },
         className
       )}
-    />
+    >
+      {children}
+      {!!clickAwayToClose && (
+        <CloseModalForm className="modal-backdrop">
+          <button type="submit" aria-label="Close" />
+        </CloseModalForm>
+      )}
+    </dialog>
   );
 }
 
@@ -43,7 +53,7 @@ export function ModalContent({
   return (
     <div className={cn("modal-box", className)} {...props}>
       {!!closeButton && (
-        <form method="dialog">
+        <CloseModalForm>
           <button
             className={cn("btn btn-sm btn-circle btn-ghost absolute", {
               "right-2 top-2": closeButton === "right",
@@ -54,7 +64,7 @@ export function ModalContent({
           >
             ✕
           </button>
-        </form>
+        </CloseModalForm>
       )}
       {children}
     </div>

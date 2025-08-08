@@ -1,6 +1,9 @@
 import { eq, and, lte } from "drizzle-orm";
 import type { Database } from "@/db";
-import { organizationInvitations, type NewOrganizationInvitation } from "@/db/schema";
+import {
+  organizationInvitations,
+  type NewOrganizationInvitation,
+} from "@/db/schema";
 
 export async function createInvitation(
   db: Database,
@@ -10,7 +13,7 @@ export async function createInvitation(
     .insert(organizationInvitations)
     .values(invitation)
     .returning({ id: organizationInvitations.id });
-  
+
   return newInvitation.id;
 }
 
@@ -30,16 +33,14 @@ export async function acceptInvitation(
 ): Promise<void> {
   await db
     .update(organizationInvitations)
-    .set({ 
+    .set({
       status: "accepted",
-      acceptedAt: new Date()
+      acceptedAt: new Date(),
     })
     .where(eq(organizationInvitations.id, invitationId));
 }
 
-export async function expireOldInvitations(
-  db: Database
-): Promise<void> {
+export async function expireOldInvitations(db: Database): Promise<void> {
   await db
     .update(organizationInvitations)
     .set({ status: "expired" })
@@ -58,6 +59,6 @@ export async function deleteInvitation(
   const result = await db
     .delete(organizationInvitations)
     .where(eq(organizationInvitations.id, invitationId));
-  
+
   return result.rowCount === 1;
 }

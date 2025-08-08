@@ -7,6 +7,7 @@ import {
   type FormMetadata,
   type SubmissionResult,
 } from "@conform-to/react";
+import type { DefaultValue } from "@conform-to/dom";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition } from "react";
 import type { input, output, ZodType } from "zod/v4";
@@ -15,11 +16,13 @@ import { cn } from "@/lib/utils";
 
 export function useForm<Schema extends ZodType>({
   action,
+  defaultValue,
   lastResult,
   onSubmit,
   schema,
 }: {
   action: React.ComponentProps<"form">["action"];
+  defaultValue?: DefaultValue<input<Schema>>;
   lastResult: SubmissionResult | undefined;
   onSubmit?: React.ComponentProps<"form">["onSubmit"];
   schema: Schema;
@@ -29,6 +32,7 @@ export function useForm<Schema extends ZodType>({
     output<Schema>,
     string[]
   >({
+    defaultValue: defaultValue as any,
     lastResult,
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",

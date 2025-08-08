@@ -1,6 +1,5 @@
 "use client";
 
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition, useActionState, useState } from "react";
 
@@ -14,6 +13,7 @@ import {
   DeleteAccountSchema,
   UpdateNameSchema,
 } from "@/actions/profile/schema";
+import { Form, FormErrors, Input, useForm } from "@/components/form";
 import { Icon } from "@/components/icon";
 import type { User } from "@/db/schema";
 import { Card } from "@/components/ui/card";
@@ -23,7 +23,7 @@ export function ProfileForms({ user }: { user: User }) {
     <div className="grid gap-8">
       <UserInfoSection user={user} />
       <UpdateNameForm currentName={user.name} />
-      <ChangePasswordForm />
+      <ChangePasswordForm email={user.email} />
       <DeleteAccountForm userEmail={user.email} />
     </div>
   );
@@ -73,41 +73,24 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
   const [lastResult, action, pending] = useActionState(updateName, undefined);
 
   const [form, fields] = useForm({
+    action,
     lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: UpdateNameSchema });
-    },
-    onSubmit(event, { formData }) {
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: UpdateNameSchema,
   });
 
   return (
     <Card>
       <div className="card-body space-y-4">
         <h2 className="card-title">Update Name</h2>
-        <form
-          {...getFormProps(form)}
-          action={action}
-          className="grid gap-4"
-        >
-          <div className="grid gap-1">
-            <label className="floating-label">
-              <span>Name</span>
-              <input
-                {...getInputProps(fields.name, { type: "text" })}
-                placeholder="Your name"
-                defaultValue={currentName || ""}
-                className="input w-full"
-              />
-            </label>
-            <div id={fields.name.errorId} className="text-error">
-              {fields.name.errors}
-            </div>
-          </div>
+        <Form action={action} form={form}>
+          <Input
+            field={fields.name}
+            label="Name"
+            type="text"
+            placeholder="Display Name"
+            defaultValue={currentName || ""}
+          />
+
           <div className="card-actions">
             <button className="btn btn-primary" type="submit">
               {pending ? (
@@ -130,86 +113,52 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
               <span>{form.errors}</span>
             </div>
           )}
-        </form>
+        </Form>
       </div>
     </Card>
   );
 }
 
-function ChangePasswordForm() {
+function ChangePasswordForm({ email }: { email: string }) {
   const [lastResult, action, pending] = useActionState(
     changePassword,
     undefined
   );
 
   const [form, fields] = useForm({
+    action,
     lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: ChangePasswordSchema });
-    },
-    onSubmit(event, { formData }) {
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: ChangePasswordSchema,
   });
 
   return (
     <Card>
       <div className="card-body space-y-4">
         <h2 className="card-title">Change Password</h2>
-        <form
-          {...getFormProps(form)}
-          action={action}
-          className="grid gap-4"
-        >
-          <div className="grid gap-1">
-            <label className="floating-label">
-              <span>Current Password</span>
-              <input
-                {...getInputProps(fields.currentPassword, {
-                  type: "password",
-                })}
-                placeholder="Enter current password"
-                autoComplete="current-password"
-                className="input w-full"
-              />
-            </label>
-            <div id={fields.currentPassword.errorId} className="text-error">
-              {fields.currentPassword.errors}
-            </div>
-          </div>
-          <div className="grid gap-1">
-            <label className="floating-label">
-              <span>New Password</span>
-              <input
-                {...getInputProps(fields.newPassword, { type: "password" })}
-                placeholder="Enter new password"
-                autoComplete="new-password"
-                className="input w-full"
-              />
-            </label>
-            <div id={fields.newPassword.errorId} className="text-error">
-              {fields.newPassword.errors}
-            </div>
-          </div>
-          <div className="grid gap-1">
-            <label className="floating-label">
-              <span>Confirm New Password</span>
-              <input
-                {...getInputProps(fields.confirmPassword, {
-                  type: "password",
-                })}
-                placeholder="Confirm new password"
-                autoComplete="new-password"
-                className="input w-full"
-              />
-            </label>
-            <div id={fields.confirmPassword.errorId} className="text-error">
-              {fields.confirmPassword.errors}
-            </div>
-          </div>
+        <Form action={action} form={form}>
+          <input hidden autoComplete="username" name="username" />
+          <Input
+            field={fields.currentPassword}
+            label="Current Password"
+            type="password"
+            placeholder="Enter current password"
+            autoComplete="current-password"
+          />
+          <Input
+            field={fields.newPassword}
+            label="New Password"
+            type="password"
+            placeholder="Enter new password"
+            autoComplete="new-password"
+          />
+          <Input
+            field={fields.confirmPassword}
+            label="Confirm Password"
+            type="password"
+            placeholder="Confirm password"
+            autoComplete="new-password"
+          />
+
           <div className="card-actions">
             <button className="btn btn-primary" type="submit">
               {pending ? (
@@ -222,17 +171,13 @@ function ChangePasswordForm() {
               )}
             </button>
           </div>
+          <FormErrors form={form} />
           {lastResult && lastResult.status !== "error" && (
             <div className="alert alert-success">
               <span>Password changed successfully!</span>
             </div>
           )}
-          {form.errors && (
-            <div id={form.errorId} className="alert alert-error">
-              <span>{form.errors}</span>
-            </div>
-          )}
-        </form>
+        </Form>
       </div>
     </Card>
   );
@@ -246,16 +191,9 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
   );
 
   const [form, fields] = useForm({
+    action,
     lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: DeleteAccountSchema });
-    },
-    onSubmit(event, { formData }) {
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: DeleteAccountSchema,
   });
 
   return (
@@ -277,11 +215,7 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
             </button>
           </div>
         ) : (
-          <form
-            {...getFormProps(form)}
-            action={action}
-            className="grid gap-4"
-          >
+          <Form action={action} form={form}>
             <div className="alert alert-warning">
               <Icon name="exclamation-triangle" className="h-6 w-6" />
               <span>
@@ -289,20 +223,14 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
                 deletion.
               </span>
             </div>
-            <div className="grid gap-1">
-              <label className="floating-label">
-                <span>Email Confirmation</span>
-                <input
-                  {...getInputProps(fields.email, { type: "email" })}
-                  placeholder="Type your email to confirm"
-                  autoComplete="off"
-                  className="input w-full"
-                />
-              </label>
-              <div id={fields.email.errorId} className="text-error">
-                {fields.email.errors}
-              </div>
-            </div>
+            <Input
+              field={fields.email}
+              label="Email Confirmation"
+              type="email"
+              placeholder="Type your email to confirm"
+              autoComplete="off"
+            />
+            <FormErrors form={form} />
             <div className="card-actions gap-2">
               <button
                 type="button"
@@ -322,12 +250,7 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
                 )}
               </button>
             </div>
-            {form.errors && (
-              <div id={form.errorId} className="alert alert-error">
-                <span>{form.errors}</span>
-              </div>
-            )}
-          </form>
+          </Form>
         )}
       </div>
     </Card>

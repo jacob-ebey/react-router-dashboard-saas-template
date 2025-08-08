@@ -5,6 +5,5 @@ export function openModal(id: string) {
 }
 
 export function closeModal(id: string) {
-  console.log({ id });
   (document.getElementById(id) as HTMLDialogElement).close();
 }

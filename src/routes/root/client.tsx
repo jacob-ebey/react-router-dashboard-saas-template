@@ -2,6 +2,8 @@
 
 import { isRouteErrorResponse, useRouteError } from "react-router";
 
+import { Icons } from "@/components/icon";
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -12,7 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased">
         {children}
-        
+        <Icons />
       </body>
     </html>
   );

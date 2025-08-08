@@ -7,9 +7,9 @@ import { redirect } from "react-router";
 import { DEFAULT_LOGOUT_REDIRECT_PATH } from "@/constants";
 import { getDb } from "@/db";
 import {
+  deleteUser,
   updateUserName,
   updateUserPassword,
-  deleteUser,
   verifyUserPassword,
 } from "@/db/mutations/user";
 import { getUserById } from "@/db/queries/user";
@@ -17,9 +17,9 @@ import { requireUser } from "@/lib/auth";
 import { destroySession } from "@/lib/session";
 
 import {
-  UpdateNameSchema,
   ChangePasswordSchema,
   DeleteAccountSchema,
+  UpdateNameSchema,
 } from "./schema";
 
 export async function updateName(

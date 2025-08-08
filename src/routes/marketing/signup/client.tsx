@@ -21,7 +21,12 @@ export function SignupForm() {
 
   return (
     <Form action={action} form={form}>
-      <input type="hidden" name="username" value="user" />
+      <input
+        hidden
+        autoComplete="username"
+        name="username"
+        defaultValue="user"
+      />
       <input type="hidden" name={fields.redirectTo.name} value={redirectTo} />
       <Input
         field={fields.name}
@@ -35,6 +40,7 @@ export function SignupForm() {
         label="Email"
         type="email"
         placeholder="john.doe@example.com"
+        autoComplete="email"
         required
       />
       <Input
@@ -42,6 +48,7 @@ export function SignupForm() {
         label="Password"
         type="password"
         placeholder="********"
+        autoComplete="new-password"
         required
       />
       <Input
@@ -49,6 +56,7 @@ export function SignupForm() {
         label="Confirm Password"
         type="password"
         placeholder="********"
+        autoComplete="new-password"
         required
       />
       <FormErrors form={form} />

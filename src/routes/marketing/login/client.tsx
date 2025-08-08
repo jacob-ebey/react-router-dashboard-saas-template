@@ -21,13 +21,24 @@ export function LoginForm() {
 
   return (
     <Form action={action} form={form}>
-      <input type="hidden" name="username" value="user" />
-      <input type="hidden" name={fields.redirectTo.name} value={redirectTo} />
+      <input
+        hidden
+        autoComplete="username"
+        name="username"
+        defaultValue="user"
+      />
+      <input
+        hidden
+        autoComplete="username"
+        name="username"
+        defaultValue="user"
+      />
       <Input
         field={fields.email}
         label="Email"
         type="email"
         placeholder="john.doe@example.com"
+        autoComplete="email"
         required
       />
       <Input
@@ -35,6 +46,7 @@ export function LoginForm() {
         label="Password"
         type="password"
         placeholder="********"
+        autoComplete="current-password"
         required
       />
       <FormErrors form={form} />

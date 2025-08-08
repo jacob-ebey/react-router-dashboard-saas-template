@@ -212,10 +212,10 @@ export function OrganizationSettingsForms({
       )}
 
       {/* Delete Modal */}
-      <Modal id="delete-organization-modal" position="end">
-        <ModalContent closeButton="right">
+      <Modal id="delete-organization-modal" position="end" clickAwayToClose>
+        <ModalContent className="space-y-4 w-full max-w-md" closeButton="right">
           <h3 className="font-bold text-lg text-error">Delete Organization</h3>
-          <p className="py-4">
+          <p>
             Are you sure you want to delete <strong>{organization.name}</strong>
             ? This action cannot be undone and will remove all associated data.
           </p>
@@ -225,16 +225,13 @@ export function OrganizationSettingsForms({
             onCancel={() => closeModal("delete-organization-modal")}
           />
         </ModalContent>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
       </Modal>
 
       {/* Leave Modal */}
-      <Modal id="leave-organization-modal" position="end">
-        <ModalContent closeButton="right">
+      <Modal id="leave-organization-modal" position="end" clickAwayToClose>
+        <ModalContent className="space-y-4 w-full max-w-md" closeButton="right">
           <h3 className="font-bold text-lg text-error">Leave Organization</h3>
-          <p className="py-4">
+          <p>
             Are you sure you want to leave <strong>{organization.name}</strong>?
             This action cannot be undone and will remove you from the
             organization.
@@ -245,16 +242,13 @@ export function OrganizationSettingsForms({
             onCancel={() => closeModal("leave-organization-modal")}
           />
         </ModalContent>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
       </Modal>
 
       {/* Invite Modal */}
-      <Modal id="invite-modal" position="end">
-        <ModalContent closeButton="right" className="max-w-lg w-full">
-          <h3 className="font-bold text-lg mb-4">Invite User</h3>
-          <p className="mb-4">
+      <Modal id="invite-modal" position="end" clickAwayToClose>
+        <ModalContent className="max-w-lg w-full space-y-4" closeButton="right">
+          <h3 className="font-bold text-lg">Invite User</h3>
+          <p>
             Send an invitation to join <strong>{organization.name}</strong>.
           </p>
           <InviteUserForm
@@ -262,15 +256,11 @@ export function OrganizationSettingsForms({
             onSuccess={closeModal.bind(null, "invite-modal")}
           />
         </ModalContent>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
       </Modal>
 
       {/* Delete Invitation Modal */}
-
-      <Modal id="delete-invitation-modal" position="end">
-        <ModalContent closeButton="right">
+      <Modal id="delete-invitation-modal" position="end" clickAwayToClose>
+        <ModalContent className="space-y-4 w-full max-w-md" closeButton="right">
           <h3 className="font-bold text-lg text-error mb-4">
             Delete Invitation
           </h3>
@@ -282,16 +272,6 @@ export function OrganizationSettingsForms({
             />
           )}
         </ModalContent>
-        <form method="dialog" className="modal-backdrop">
-          <button
-            onClick={() => {
-              setDeleteInvitation(null);
-              closeModal("delete-invitation-modal");
-            }}
-          >
-            close
-          </button>
-        </form>
       </Modal>
     </div>
   );

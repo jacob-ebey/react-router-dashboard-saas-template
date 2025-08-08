@@ -13,6 +13,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@conform-to/dom": "1.8.2",
     "@conform-to/react": "1.8.2",
     "@conform-to/zod": "1.8.2",
     "@radix-ui/react-slot": "1.2.3",

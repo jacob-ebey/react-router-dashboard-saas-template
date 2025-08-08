@@ -1,11 +1,5 @@
 "use client";
 
-import {
-  getFormProps,
-  getInputProps,
-  getSelectProps,
-  useForm,
-} from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition, useActionState } from "react";
 
@@ -20,6 +14,7 @@ import {
 import { closeModal } from "@/components/ui/modal";
 import type { Organization } from "@/db/schema";
 
+import { Form, Input, Select, useForm } from "./form";
 import { Icon } from "./icon";
 
 export function InviteUserForm({
@@ -41,58 +36,33 @@ export function InviteUserForm({
   );
 
   const [form, fields] = useForm({
+    action,
     defaultValue: {
       role: "member",
     },
     lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: InviteUserFormSchema });
-    },
-    onSubmit(event, { formData }) {
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: InviteUserFormSchema,
   });
 
   return (
-    <form {...getFormProps(form)} action={action} className="grid gap-4">
+    <Form action={action} form={form}>
       <input type="hidden" name="organizationId" value={organization.id} />
 
-      <div className="grid gap-1">
-        <label className="floating-label">
-          <span>Email</span>
-          <input
-            {...getInputProps(fields.email, { type: "email" })}
-            placeholder="colleague@company.com"
-            autoComplete="email"
-            defaultValue={form.initialValue?.email}
-            className="input w-full"
-          />
-        </label>
-        <div id={fields.email.errorId} className="text-error">
-          {fields.email.errors}
-        </div>
-      </div>
+      <Input
+        field={fields.email}
+        label="Email"
+        type="email"
+        placeholder="colleague@company.com"
+        autoComplete="email"
+      />
 
-      <div className="grid gap-1">
-        <label className="floating-label">
-          <span>Role</span>
-          <select
-            {...getSelectProps(fields.role)}
-            className="select w-full"
-            defaultValue={form.initialValue?.role}
-          >
-            <option value="member">Member</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
-            <option value="guest">Guest</option>
-          </select>
-        </label>
-        <div id={fields.role.errorId} className="text-error">
-          {fields.role.errors}
-        </div>
+      <div>
+        <Select field={fields.role} label="Role">
+          <option value="member">Member</option>
+          <option value="manager">Manager</option>
+          <option value="admin">Admin</option>
+          <option value="guest">Guest</option>
+        </Select>
         <div className="text-xs text-neutral mt-1">
           <ul className="list-disc list-inside space-y-1">
             <li>
@@ -135,7 +105,7 @@ export function InviteUserForm({
           <span>Invitation sent successfully!</span>
         </div>
       )}
-    </form>
+    </Form>
   );
 }
 
@@ -154,19 +124,14 @@ export function DeleteInvitationForm({
   );
 
   const [form, _fields] = useForm({
+    action,
     lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: DeleteInvitationFormSchema });
-    },
-    onSubmit(event, { formData }) {
-      closeModal("delete-invitation-modal");
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: DeleteInvitationFormSchema,
+    onSubmit: closeModal.bind(null, "delete-invitation-modal"),
   });
 
   return (
-    <form {...getFormProps(form)} action={action} className="space-y-4">
+    <Form action={action} form={form}>
       <input type="hidden" name="invitationId" value={invitationId} />
 
       <div className="alert alert-error">
@@ -212,6 +177,6 @@ export function DeleteInvitationForm({
           )}
         </button>
       </div>
-    </form>
+    </Form>
   );
 }

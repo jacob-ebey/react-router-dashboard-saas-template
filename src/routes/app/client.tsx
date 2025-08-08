@@ -10,6 +10,7 @@ import { Icon } from "@/components/icon";
 import { ScrollRestoration } from "@/components/scroll-restoration";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
 import { Card } from "@/components/ui/card";
+import { Modal, ModalContent } from "@/components/ui/modal";
 
 export function openSidebar() {
   sidebar.showModal();
@@ -79,24 +80,15 @@ export function NotificationsPanel({ invitations }: NotificationsPanelProps) {
       </button>
 
       {/* Notifications Dialog - similar to sidebar pattern */}
-      <dialog id="notifications_dialog" className="modal modal-end">
-        <div className="modal-box w-[90vw] max-w-md h-full rounded-none p-0">
-          <div className="sticky top-0 bg-base-100 p-4 border-b border-base-200 z-10">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-lg">Notifications</h3>
-              <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost">✕</button>
-              </form>
-            </div>
-          </div>
-          <div className="p-4">
-            <NotificationsContent invitations={invitations} />
-          </div>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
+      <Modal id="notifications_dialog" position="end" clickAwayToClose>
+        <ModalContent
+          className="w-full max-w-md h-full space-y-4"
+          closeButton="right"
+        >
+          <h3 className="text-lg font-bold">Notifications</h3>
+          <NotificationsContent invitations={invitations} />
+        </ModalContent>
+      </Modal>
     </>
   );
 }

@@ -8,6 +8,7 @@ import { getUser } from "@/lib/auth";
 import { openLoginModal, openSignupModal } from "./client";
 import { LoginForm } from "./login/client";
 import { SignupForm } from "./signup/client";
+import { Modal, ModalContent } from "@/components/ui/modal";
 
 declare global {
   var login_modal: HTMLDialogElement;
@@ -139,56 +140,40 @@ export default function MarketingLayout() {
 
       {!loggedIn && (
         <>
-          <dialog
+          <Modal
             id="login_modal"
-            className="modal modal-end"
+            position="end"
             aria-labelledby="login-modal-title"
             aria-describedby="login-modal-description"
+            clickAwayToClose
           >
-            <div className="modal-box max-w-lg w-full">
-              <form method="dialog">
-                <button
-                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                  type="submit"
-                  aria-label="Close login dialog"
-                >
-                  ✕
-                </button>
-              </form>
-              <h3 className="text-lg font-bold mb-4" id="login-modal-title">
+            <ModalContent className="w-full max-w-md space-y-4">
+              <h3 className="text-lg font-bold" id="login-modal-title">
                 Login
               </h3>
-              <p className="my-4" id="login-modal-description">
+              <p id="login-modal-description">
                 Welcome back! Please enter your details.
               </p>
               <LoginForm />
-            </div>
-          </dialog>
-          <dialog
+            </ModalContent>
+          </Modal>
+          <Modal
             id="signup_modal"
-            className="modal modal-end"
+            position="end"
             aria-labelledby="signup-modal-title"
             aria-describedby="signup-modal-description"
+            clickAwayToClose
           >
-            <div className="modal-box max-w-lg w-full">
-              <form method="dialog">
-                <button
-                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                  type="submit"
-                  aria-label="Close signup dialog"
-                >
-                  ✕
-                </button>
-              </form>
+            <ModalContent className="w-full max-w-md space-y-4">
               <h3 className="text-lg font-bold" id="signup-modal-title">
                 Signup
               </h3>
-              <p className="my-4" id="signup-modal-description">
+              <p id="signup-modal-description">
                 Get started with your free trial.
               </p>
               <SignupForm />
-            </div>
-          </dialog>
+            </ModalContent>
+          </Modal>
         </>
       )}
 

@@ -29,10 +29,7 @@ export async function generateHTML(
         await import.meta.viteRsc.loadBootstrapScriptContent("index");
 
       const stream = await renderHTMLToReadableStream(
-        <>
-          <RSCStaticRouter getPayload={getPayload} />
-          <Icons />
-        </>,
+        <RSCStaticRouter getPayload={getPayload} />,
         {
           bootstrapScriptContent,
           // @ts-expect-error - no types for this yet
