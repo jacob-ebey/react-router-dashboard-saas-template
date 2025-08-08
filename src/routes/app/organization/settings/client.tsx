@@ -49,7 +49,7 @@ export function OrganizationSettingsForms({
   } | null>(null);
 
   return (
-    <div className="grid gap-8">
+    <div className="flex flex-col gap-8">
       {/* General Settings */}
       {(userRole === "owner" || userRole === "admin") && (
         <Card>
@@ -63,7 +63,7 @@ export function OrganizationSettingsForms({
       {/* Team Management */}
       {(userRole === "owner" || userRole === "admin") && (
         <Card>
-          <div className="card-body space-y-4">
+          <div className="card-body flex flex-col gap-4">
             <h2 className="card-title text-secondary">Team Management</h2>
             <p className="text-neutral">
               Invite team members to collaborate on your organization.
@@ -80,7 +80,7 @@ export function OrganizationSettingsForms({
 
             {/* Pending Invitations */}
             {invitations.length > 0 && (
-              <>
+              <div className="flex-1">
                 <div className="divider">Pending Invitations</div>
                 <div className="overflow-x-auto">
                   <table className="table table-zebra">
@@ -166,7 +166,7 @@ export function OrganizationSettingsForms({
                     </tbody>
                   </table>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </Card>
