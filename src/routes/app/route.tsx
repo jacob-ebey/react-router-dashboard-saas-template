@@ -2,19 +2,38 @@ import { Link, Outlet, type RouteComponentProps } from "react-router";
 
 import { LogoutForm } from "@/components/auth-forms";
 import { GloablLoader } from "@/components/global-loader";
-import { requireUserMiddleware } from "@/lib/auth";
+import { requireUserMiddleware, requireUser } from "@/lib/auth";
+import { getDb } from "@/db";
+import { getUserById } from "@/db/queries/user";
+import { getUserPendingInvitations } from "@/db/queries/invitation";
 
-import { openSidebar, ScrollRestorationDiv } from "./client";
+import {
+  openSidebar,
+  ScrollRestorationDiv,
+  NotificationsPanel,
+} from "./client";
 import { getServerHandle } from "./handle";
 import { cn } from "@/lib/utils";
 
 declare global {
   var sidebar: HTMLDialogElement;
+  var notifications_dialog: HTMLDialogElement;
 }
 
 export const unstable_middleware = [requireUserMiddleware];
 
-export default function AppLayout({ matches }: RouteComponentProps) {
+export default async function AppLayout({ matches }: RouteComponentProps) {
+  const userId = requireUser();
+  const db = getDb();
+
+  // Get user details and pending invitations
+  const user = await getUserById(db, userId.id);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const pendingInvitations = await getUserPendingInvitations(db, user.email);
+
   const leafHandle = matches.at(-1)?.handle;
   const { SidebarContent } = getServerHandle(leafHandle) ?? {};
 
@@ -49,6 +68,7 @@ export default function AppLayout({ matches }: RouteComponentProps) {
           </div>
           <div className="navbar-end gap-2">
             <GloablLoader />
+            <NotificationsPanel invitations={pendingInvitations} />
             <Link to="/app/profile" className="btn btn-ghost">
               Profile
             </Link>

@@ -12,18 +12,37 @@ import {
   UpdateOrganizationFormSchema,
   DeleteOrganizationFormSchema,
 } from "@/actions/organization/schema";
-import type { Organization } from "@/db/schema";
+import {
+  InviteUserForm,
+  DeleteInvitationForm,
+} from "@/components/invitation-forms";
+import {
+  Modal,
+  ModalContent,
+  openModal,
+  closeModal,
+} from "@/components/ui/modal";
+import type { Organization, OrganizationInvitation, User } from "@/db/schema";
 
 interface OrganizationSettingsFormsProps {
   organization: Organization;
   userRole: string;
+  invitations: Array<{
+    invitation: OrganizationInvitation;
+    invitedBy: Pick<User, "id" | "email" | "name" | "avatar">;
+  }>;
 }
 
 export function OrganizationSettingsForms({
   organization,
   userRole,
+  invitations,
 }: OrganizationSettingsFormsProps) {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteInvitation, setDeleteInvitation] = useState<{
+    id: string;
+    email: string;
+    isAccepted: boolean;
+  } | null>(null);
 
   return (
     <div className="grid gap-8">
@@ -34,6 +53,130 @@ export function OrganizationSettingsForms({
           <UpdateOrganizationForm organization={organization} />
         </div>
       </div>
+
+      {/* Team Management */}
+      {(userRole === "owner" || userRole === "admin") && (
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title text-secondary mb-4">Team Management</h2>
+            <p className="text-base-content/70 mb-4">
+              Invite team members to collaborate on your organization.
+            </p>
+            <div className="card-actions mb-6">
+              <button
+                onClick={() => openModal("invite-modal")}
+                className="btn btn-primary"
+              >
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                Invite User
+              </button>
+            </div>
+
+            {/* Pending Invitations */}
+            {invitations.length > 0 && (
+              <>
+                <div className="divider">Pending Invitations</div>
+                <div className="overflow-x-auto">
+                  <table className="table table-zebra">
+                    <thead>
+                      <tr>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Invited By</th>
+                        <th>Status</th>
+                        <th>Expires</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {invitations.map(({ invitation, invitedBy }) => {
+                        const expiresAt = new Date(invitation.expiresAt);
+                        const isExpired = expiresAt < new Date();
+                        const statusClass =
+                          invitation.status === "accepted"
+                            ? "badge-success"
+                            : invitation.status === "revoked"
+                            ? "badge-error"
+                            : isExpired
+                            ? "badge-warning"
+                            : "badge-info";
+
+                        return (
+                          <tr key={invitation.id}>
+                            <td>{invitation.email}</td>
+                            <td>
+                              <span className="badge badge-ghost">
+                                {invitation.role}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="flex items-center gap-3">
+                                {invitedBy.avatar && (
+                                  <div className="avatar">
+                                    <div className="mask mask-squircle w-8 h-8">
+                                      <img
+                                        src={invitedBy.avatar}
+                                        alt={invitedBy.name || invitedBy.email}
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+                                <div>
+                                  <div className="text-sm font-medium">
+                                    {invitedBy.name || invitedBy.email}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span className={`badge ${statusClass}`}>
+                                {isExpired && invitation.status === "pending"
+                                  ? "expired"
+                                  : invitation.status}
+                              </span>
+                            </td>
+                            <td className="text-sm">
+                              {expiresAt.toLocaleDateString()}
+                            </td>
+                            <td>
+                              <button
+                                onClick={() => {
+                                  setDeleteInvitation({
+                                    id: invitation.id,
+                                    email: invitation.email,
+                                    isAccepted:
+                                      invitation.status === "accepted",
+                                  });
+                                  openModal("delete-invitation-modal");
+                                }}
+                                className="btn btn-ghost btn-xs text-error"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Danger Zone */}
       {userRole === "owner" && (
@@ -46,7 +189,7 @@ export function OrganizationSettingsForms({
             </p>
             <div className="card-actions">
               <button
-                onClick={() => setShowDeleteModal(true)}
+                onClick={() => openModal("delete-organization-modal")}
                 className="btn btn-error"
               >
                 Delete Organization
@@ -57,28 +200,67 @@ export function OrganizationSettingsForms({
       )}
 
       {/* Delete Modal */}
-      {showDeleteModal && (
-        <dialog open className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg text-error">
-              Delete Organization
-            </h3>
-            <p className="py-4">
-              Are you sure you want to delete{" "}
-              <strong>{organization.name}</strong>? This action cannot be undone
-              and will remove all associated data.
-            </p>
-            <DeleteOrganizationForm
-              organizationId={organization.id}
-              organizationName={organization.name}
-              onCancel={() => setShowDeleteModal(false)}
+      <Modal id="delete-organization-modal" position="end">
+        <ModalContent closeButton="right">
+          <h3 className="font-bold text-lg text-error">Delete Organization</h3>
+          <p className="py-4">
+            Are you sure you want to delete <strong>{organization.name}</strong>
+            ? This action cannot be undone and will remove all associated data.
+          </p>
+          <DeleteOrganizationForm
+            organizationId={organization.id}
+            organizationName={organization.name}
+            onCancel={() => closeModal("delete-organization-modal")}
+          />
+        </ModalContent>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </Modal>
+
+      {/* Invite Modal */}
+      <Modal id="invite-modal" position="end">
+        <ModalContent closeButton="right" className="max-w-lg w-full">
+          <h3 className="font-bold text-lg mb-4">Invite User</h3>
+          <p className="mb-4">
+            Send an invitation to join <strong>{organization.name}</strong>.
+          </p>
+          <InviteUserForm
+            organization={organization}
+            onSuccess={closeModal.bind(null, "invite-modal")}
+          />
+        </ModalContent>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </Modal>
+
+      {/* Delete Invitation Modal */}
+
+      <Modal id="delete-invitation-modal" position="end">
+        <ModalContent closeButton="right">
+          <h3 className="font-bold text-lg text-error mb-4">
+            Delete Invitation
+          </h3>
+          {!!deleteInvitation && (
+            <DeleteInvitationForm
+              invitationId={deleteInvitation.id}
+              invitationEmail={deleteInvitation.email}
+              isAccepted={deleteInvitation.isAccepted}
             />
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button onClick={() => setShowDeleteModal(false)}>close</button>
-          </form>
-        </dialog>
-      )}
+          )}
+        </ModalContent>
+        <form method="dialog" className="modal-backdrop">
+          <button
+            onClick={() => {
+              setDeleteInvitation(null);
+              closeModal("delete-invitation-modal");
+            }}
+          >
+            close
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 }

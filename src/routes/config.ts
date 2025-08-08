@@ -58,6 +58,11 @@ export function routes() {
                   path: ":orgSlug/settings",
                   lazy: () => import("./app/organization/$orgSlug/settings/route"),
                 },
+                {
+                  id: "app.organization.invite",
+                  path: ":orgSlug/invite",
+                  lazy: () => import("./app/organization/$orgSlug/invite/route"),
+                },
               ],
             },
             {

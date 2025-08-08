@@ -15,6 +15,17 @@ export async function getUserById(
   return user;
 }
 
+export async function getUserByEmail(
+  db: Database,
+  email: string
+): Promise<User | undefined> {
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, email),
+  });
+
+  return user;
+}
+
 export async function getUserByEmailAndPassword(
   db: Database,
   email: string,

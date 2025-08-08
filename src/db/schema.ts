@@ -92,6 +92,36 @@ export const organizationMembers = pgTable(
   (table) => [unique("org_user_idx").on(table.organizationId, table.userId)]
 );
 
+// ============================
+// ORGANIZATION INVITATIONS
+// ============================
+
+export const organizationInvitations = pgTable(
+  "organization_invitations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    invitedByUserId: uuid("invited_by_user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    email: varchar("email", { length: 255 }).notNull(),
+    role: varchar("role", { length: 50 }).default("member"), // admin, manager, member, guest
+    status: varchar("status", { length: 20 }).default("pending"), // pending, accepted, expired, revoked
+    expiresAt: timestamp("expires_at").notNull(),
+    acceptedAt: timestamp("accepted_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    unique("org_email_pending_idx").on(
+      table.organizationId,
+      table.email,
+      table.status
+    ),
+  ]
+);
+
 // Export core types first
 export type Organization = typeof organizations.$inferSelect;
 export type NewOrganization = typeof organizations.$inferInsert;
@@ -104,3 +134,6 @@ export type NewPassword = typeof passwords.$inferInsert;
 
 export type OrganizationMember = typeof organizationMembers.$inferSelect;
 export type NewOrganizationMember = typeof organizationMembers.$inferInsert;
+
+export type OrganizationInvitation = typeof organizationInvitations.$inferSelect;
+export type NewOrganizationInvitation = typeof organizationInvitations.$inferInsert;

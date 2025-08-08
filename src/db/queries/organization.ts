@@ -25,6 +25,63 @@ export async function getOrganizationBySlug(
   return organization;
 }
 
+// Secure versions that check user membership
+export async function getOrganizationByIdSecure(
+  db: Database,
+  id: string,
+  userId: string
+): Promise<Organization | undefined> {
+  // First check if user is a member
+  const membership = await db.query.organizationMembers.findFirst({
+    where: and(
+      eq(organizationMembers.userId, userId),
+      eq(organizationMembers.organizationId, id),
+      eq(organizationMembers.status, "active")
+    ),
+  });
+
+  if (!membership) {
+    return undefined;
+  }
+
+  // If user is a member, fetch the organization
+  const organization = await db.query.organizations.findFirst({
+    where: eq(organizations.id, id),
+  });
+
+  return organization;
+}
+
+export async function getOrganizationBySlugSecure(
+  db: Database,
+  slug: string,
+  userId: string
+): Promise<Organization | undefined> {
+  // First get the organization to find its ID
+  const organization = await db.query.organizations.findFirst({
+    where: eq(organizations.slug, slug),
+  });
+
+  if (!organization) {
+    return undefined;
+  }
+
+  // Check if user is a member
+  const membership = await db.query.organizationMembers.findFirst({
+    where: and(
+      eq(organizationMembers.userId, userId),
+      eq(organizationMembers.organizationId, organization.id),
+      eq(organizationMembers.status, "active")
+    ),
+  });
+
+  if (!membership) {
+    return undefined;
+  }
+
+  return organization;
+}
+
 export async function getOrganizationsForUser(
   db: Database,
   userId: string

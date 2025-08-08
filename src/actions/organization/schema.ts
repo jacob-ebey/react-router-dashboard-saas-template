@@ -63,3 +63,12 @@ export const DeleteOrganizationFormSchema = z.object({
 export type DeleteOrganizationFormData = z.infer<
   typeof DeleteOrganizationFormSchema
 >;
+
+export const RemoveMemberFormSchema = z.object({
+  memberId: z.string().uuid(),
+  organizationId: z.string().uuid(),
+});
+
+export type RemoveMemberFormData = z.infer<
+  typeof RemoveMemberFormSchema
+>;
