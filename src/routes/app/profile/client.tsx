@@ -4,17 +4,19 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition, useActionState, useState } from "react";
 
-import type { User } from "@/db/schema";
 import {
-  updateName,
   changePassword,
   deleteAccount,
+  updateName,
 } from "@/actions/profile/actions";
 import {
-  UpdateNameSchema,
   ChangePasswordSchema,
   DeleteAccountSchema,
+  UpdateNameSchema,
 } from "@/actions/profile/schema";
+import { Icon } from "@/components/icon";
+import type { User } from "@/db/schema";
+import { Card } from "@/components/ui/card";
 
 export function ProfileForms({ user }: { user: User }) {
   return (
@@ -39,31 +41,31 @@ function UserInfoSection({ user }: { user: User }) {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl">
-      <div className="card-body">
+    <Card>
+      <div className="card-body space-y-4">
         <h2 className="card-title">Account Information</h2>
         <div className="grid gap-4">
           <div>
-            <p className="text-sm text-base-content/70">Email</p>
+            <p className="text-sm text-neutral">Email</p>
             <p className="font-medium">{user.email}</p>
           </div>
           <div>
-            <p className="text-sm text-base-content/70">Account Created</p>
+            <p className="text-sm text-neutral">Account Created</p>
             <p className="font-medium">{formatDate(user.createdAt)}</p>
           </div>
           {user.lastActiveAt && (
             <div>
-              <p className="text-sm text-base-content/70">Last Active</p>
+              <p className="text-sm text-neutral">Last Active</p>
               <p className="font-medium">{formatDate(user.lastActiveAt)}</p>
             </div>
           )}
           <div>
-            <p className="text-sm text-base-content/70">User ID</p>
+            <p className="text-sm text-neutral">User ID</p>
             <p className="font-mono text-sm">{user.id}</p>
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -84,10 +86,14 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
   });
 
   return (
-    <div className="card bg-base-100 shadow-xl">
-      <div className="card-body">
+    <Card>
+      <div className="card-body space-y-4">
         <h2 className="card-title">Update Name</h2>
-        <form {...getFormProps(form)} action={action} className="grid gap-4 mt-4">
+        <form
+          {...getFormProps(form)}
+          action={action}
+          className="grid gap-4"
+        >
           <div className="grid gap-1">
             <label className="floating-label">
               <span>Name</span>
@@ -114,7 +120,7 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
               )}
             </button>
           </div>
-          {lastResult?.status === "success" && (
+          {lastResult && lastResult.status !== "error" && (
             <div className="alert alert-success">
               <span>Name updated successfully!</span>
             </div>
@@ -126,7 +132,7 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
           )}
         </form>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -150,10 +156,14 @@ function ChangePasswordForm() {
   });
 
   return (
-    <div className="card bg-base-100 shadow-xl">
-      <div className="card-body">
+    <Card>
+      <div className="card-body space-y-4">
         <h2 className="card-title">Change Password</h2>
-        <form {...getFormProps(form)} action={action} className="grid gap-4 mt-4">
+        <form
+          {...getFormProps(form)}
+          action={action}
+          className="grid gap-4"
+        >
           <div className="grid gap-1">
             <label className="floating-label">
               <span>Current Password</span>
@@ -212,7 +222,7 @@ function ChangePasswordForm() {
               )}
             </button>
           </div>
-          {lastResult?.status === "success" && (
+          {lastResult && lastResult.status !== "error" && (
             <div className="alert alert-success">
               <span>Password changed successfully!</span>
             </div>
@@ -224,7 +234,7 @@ function ChangePasswordForm() {
           )}
         </form>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -249,8 +259,8 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
   });
 
   return (
-    <div className="card card-bordered bg-error/10 border-error">
-      <div className="card-body">
+    <Card className="border-error">
+      <div className="card-body space-y-4">
         <h2 className="card-title text-error">Delete Account</h2>
         <p className="text-sm">
           This action is permanent and cannot be undone. All your data will be
@@ -258,7 +268,7 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
         </p>
 
         {!showConfirmation ? (
-          <div className="card-actions mt-4">
+          <div className="card-actions">
             <button
               className="btn btn-error"
               onClick={() => setShowConfirmation(true)}
@@ -267,21 +277,13 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
             </button>
           </div>
         ) : (
-          <form {...getFormProps(form)} action={action} className="grid gap-4 mt-4">
+          <form
+            {...getFormProps(form)}
+            action={action}
+            className="grid gap-4"
+          >
             <div className="alert alert-warning">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
+              <Icon name="exclamation-triangle" className="h-6 w-6" />
               <span>
                 Type your email address <strong>{userEmail}</strong> to confirm
                 deletion.
@@ -328,6 +330,6 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
           </form>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

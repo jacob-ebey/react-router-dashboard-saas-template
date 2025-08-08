@@ -1,5 +1,6 @@
-import { SignupForm } from "@/components/auth-forms";
 import { PreserveRedirectLink } from "@/components/preserve-redirect-link";
+
+import { SignupForm } from "./client";
 
 export default function Signup() {
   return (

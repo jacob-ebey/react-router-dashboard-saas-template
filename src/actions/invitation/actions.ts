@@ -50,7 +50,11 @@ export async function inviteUser(
   try {
     // Check if user has permission to invite
     const userRole = await getUserOrgRole(db, user.id, organizationId);
-    if (userRole !== "owner" && userRole !== "admin") {
+    if (
+      userRole !== "owner" &&
+      userRole !== "admin" &&
+      userRole !== "manager"
+    ) {
       return submission.reply({
         formErrors: [
           "You don't have permission to invite users to this organization",
@@ -233,7 +237,11 @@ export async function deleteInvitationAndRemoveUser(
       user.id,
       invitation.organizationId
     );
-    if (userRole !== "owner" && userRole !== "admin") {
+    if (
+      userRole !== "owner" &&
+      userRole !== "admin" &&
+      userRole !== "manager"
+    ) {
       return submission.reply({
         formErrors: ["You don't have permission to delete invitations"],
       });

@@ -1,14 +1,15 @@
 "use client";
 
-import {
-  useRef,
-  startTransition,
-  useActionState,
-} from "react";
+import { startTransition, useActionState, useRef } from "react";
 
+import {
+  acceptInvitation,
+  declineInvitation,
+} from "@/actions/invitation/actions";
+import { Icon } from "@/components/icon";
 import { ScrollRestoration } from "@/components/scroll-restoration";
-import { acceptInvitation, declineInvitation } from "@/actions/invitation/actions";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
+import { Card } from "@/components/ui/card";
 
 export function openSidebar() {
   sidebar.showModal();
@@ -70,38 +71,21 @@ export function NotificationsPanel({ invitations }: NotificationsPanelProps) {
         className="btn btn-ghost btn-circle relative"
         aria-label="Notifications"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-          />
-        </svg>
+        <Icon name="bell" className="h-5 w-5" />
+
         {hasNotifications && (
           <span className="badge badge-xs badge-error absolute top-0 right-0 animate-pulse"></span>
         )}
       </button>
 
       {/* Notifications Dialog - similar to sidebar pattern */}
-      <dialog
-        id="notifications_dialog"
-        className="modal modal-end"
-      >
+      <dialog id="notifications_dialog" className="modal modal-end">
         <div className="modal-box w-[90vw] max-w-md h-full rounded-none p-0">
           <div className="sticky top-0 bg-base-100 p-4 border-b border-base-200 z-10">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-lg">Notifications</h3>
               <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost">
-                  ✕
-                </button>
+                <button className="btn btn-sm btn-circle btn-ghost">✕</button>
               </form>
             </div>
           </div>
@@ -124,30 +108,19 @@ function NotificationsContent({
 }) {
   if (invitations.length === 0) {
     return (
-      <div className="py-16 text-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-12 w-12 mx-auto mb-4 text-base-content/20"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-          />
-        </svg>
-        <p className="text-base-content/60">No new notifications</p>
+      <div className="py-16 text-center space-y-4">
+        <Icon name="envelope-open" className="h-12 w-12 mx-auto" />
+
+        <p className="text-neutral">No new notifications</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-2">
-      <p className="text-sm text-base-content/60 mb-4">
-        You have {invitations.length} pending invitation{invitations.length !== 1 ? 's' : ''}
+      <p className="text-sm text-neutral mb-4">
+        You have {invitations.length} pending invitation
+        {invitations.length !== 1 ? "s" : ""}
       </p>
       <div className="space-y-2">
         {invitations.map(({ invitation, organization, invitedBy }) => (
@@ -176,7 +149,7 @@ function InvitationNotification({
     acceptInvitation,
     undefined
   );
-  
+
   const [declineResult, declineAction, declinePending] = useActionState(
     declineInvitation,
     undefined
@@ -187,7 +160,7 @@ function InvitationNotification({
       acceptAction(formData);
     });
   };
-  
+
   const handleDecline = (formData: FormData) => {
     startTransition(() => {
       declineAction(formData);
@@ -195,7 +168,7 @@ function InvitationNotification({
   };
 
   return (
-    <div className="card bg-base-200 shadow-sm">
+    <Card className="bg-base-200">
       <div className="card-body p-4">
         <div className="flex items-start gap-3">
           {organization.logoUrl ? (
@@ -223,12 +196,16 @@ function InvitationNotification({
                 {invitation.role}
               </span>
             </p>
-            <p className="text-xs text-base-content/60 mt-1">
+            <p className="text-xs text-neutral mt-1">
               Expires {new Date(invitation.expiresAt).toLocaleDateString()}
             </p>
             <div className="flex gap-2 mt-3">
               <form action={handleAccept} className="inline-block">
-                <input type="hidden" name="invitationId" value={invitation.id} />
+                <input
+                  type="hidden"
+                  name="invitationId"
+                  value={invitation.id}
+                />
                 <button
                   type="submit"
                   className="btn btn-primary btn-sm"
@@ -242,7 +219,11 @@ function InvitationNotification({
                 </button>
               </form>
               <form action={handleDecline} className="inline-block">
-                <input type="hidden" name="invitationId" value={invitation.id} />
+                <input
+                  type="hidden"
+                  name="invitationId"
+                  value={invitation.id}
+                />
                 <button
                   type="submit"
                   className="btn btn-ghost btn-sm"
@@ -268,6 +249,6 @@ function InvitationNotification({
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

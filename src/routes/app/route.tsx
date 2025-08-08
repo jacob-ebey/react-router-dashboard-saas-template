@@ -1,19 +1,20 @@
 import { Link, Outlet, type RouteComponentProps } from "react-router";
 
-import { LogoutForm } from "@/components/auth-forms";
 import { GloablLoader } from "@/components/global-loader";
-import { requireUserMiddleware, requireUser } from "@/lib/auth";
+import { Icon } from "@/components/icon";
+import { LogoutForm } from "@/components/logout-form";
 import { getDb } from "@/db";
-import { getUserById } from "@/db/queries/user";
 import { getUserPendingInvitations } from "@/db/queries/invitation";
+import { getUserById } from "@/db/queries/user";
+import { requireUser, requireUserMiddleware } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 import {
+  NotificationsPanel,
   openSidebar,
   ScrollRestorationDiv,
-  NotificationsPanel,
 } from "./client";
 import { getServerHandle } from "./handle";
-import { cn } from "@/lib/utils";
 
 declare global {
   var sidebar: HTMLDialogElement;
@@ -41,26 +42,19 @@ export default async function AppLayout({ matches }: RouteComponentProps) {
     <>
       <div className="h-screen grid grid-rows-[auto_1fr] max-h-screen">
         <header
-          className="navbar bg-base-200 shadow-sm sticky top-0 z-10 md:relative"
+          className="navbar bg-base-100 shadow-sm sticky top-0 z-10 md:relative"
           aria-label="Navbar"
         >
-          <div className="flex-none md:hidden">
-            <button className="btn btn-square btn-ghost" onClick={openSidebar}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-5 w-5 stroke-current"
+          {!!SidebarContent && (
+            <div className="flex-none md:hidden">
+              <button
+                className="btn btn-square btn-ghost"
+                onClick={openSidebar}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
-          </div>
+                <Icon name="bars-3-bottom-left" className="h-5 w-5" />
+              </button>
+            </div>
+          )}
           <div className="navbar-start">
             <Link to="/app" className="text-xl font-bold">
               ✨ The App
@@ -86,7 +80,7 @@ export default async function AppLayout({ matches }: RouteComponentProps) {
               id="sidebar"
               className="md:modal-open modal modal-start md:!contents md:!bg-transparent md:h-full"
             >
-              <div className="p-0 modal-box md:!relative md:!translate-0 md:visible md:opacity-100 md:pointer-events-auto w-[90vw] md:w-54 lg:w-64 bg-base-200 md:resize-x md:h-full md:rounded-none z-10 shadow-sm">
+              <div className="p-0 modal-box md:!relative md:!translate-0 md:visible md:opacity-100 md:pointer-events-auto w-[90vw] md:w-54 lg:w-64 bg-base-100 md:resize-x md:h-full md:rounded-none z-10 shadow-sm">
                 <SidebarContent />
               </div>
               <form method="dialog" className="modal-backdrop md:hidden">

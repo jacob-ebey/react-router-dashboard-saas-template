@@ -1,5 +1,6 @@
-import { LoginForm } from "@/components/auth-forms";
 import { PreserveRedirectLink } from "@/components/preserve-redirect-link";
+
+import { LoginForm } from "./client";
 
 export default function Login() {
   return (

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 
 import { AccessDenied } from "@/components/access-denied";
+import { Icon } from "@/components/icon";
 import { getDb } from "@/db";
 import { getOrganizationInvitations } from "@/db/queries/invitation";
 import {
@@ -53,19 +54,7 @@ export default async function OrganizationSettings({
               to={`/app/organization/${organization.slug}`}
               className="btn btn-ghost btn-sm"
             >
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <Icon name="chevron-left" className="h-4 w-4 mr-2" />
               Back to Organization
             </Link>
           </div>

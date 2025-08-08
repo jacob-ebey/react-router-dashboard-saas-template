@@ -1,7 +1,9 @@
 import { Link } from "react-router";
 
 import { AccessDenied } from "@/components/access-denied";
+import { Icon } from "@/components/icon";
 import { InviteUserForm } from "@/components/invitation-forms";
+import { Card } from "@/components/ui/card";
 import { getDb } from "@/db";
 import {
   getOrganizationBySlugSecure,
@@ -23,12 +25,12 @@ export default async function InviteUser({
     user.id
   );
   if (!organization) {
-    throw new Error("Organization not found or access denied");
+    return <AccessDenied />;
   }
 
   // Check if user has permission to invite
   const userRole = await getUserOrgRole(db, user.id, organization.id);
-  if (userRole !== "owner" && userRole !== "admin") {
+  if (userRole !== "owner" && userRole !== "admin" && userRole !== "manager") {
     return <AccessDenied />;
   }
 
@@ -40,41 +42,29 @@ export default async function InviteUser({
         content={`Invite users to ${organization.name} organization`}
       />
 
-      <main className="max-w-lg mx-auto px-4 py-8 min-h-full flex flex-col">
-        <div className="mb-6">
-          <Link
-            to={`/app/organization/${organization.slug}`}
-            className="btn btn-ghost btn-sm"
-          >
-            <svg
-              className="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      <div className="p-4 bg-base-200 min-h-full">
+        <main className="max-w-screen-xl w-full mx-auto flex flex-col">
+          <div className="mb-6">
+            <Link
+              to={`/app/organization/${organization.slug}`}
+              className="btn btn-ghost btn-sm"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to {organization.name}
-          </Link>
-        </div>
-
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h1 className="card-title text-2xl text-primary mb-4">
-              Invite User
-            </h1>
-            <p className="text-base-content/70 mb-6">
-              Send an invitation to join <strong>{organization.name}</strong>.
-            </p>
-            <InviteUserForm organization={organization} />
+              <Icon name="chevron-left" className="h-4 w-4 mr-2" />
+              Back to {organization.name}
+            </Link>
           </div>
-        </div>
-      </main>
+
+          <Card>
+            <div className="card-body space-y-4">
+              <h1 className="card-title">Invite User</h1>
+              <p className="text-neutral">
+                Send an invitation to join <strong>{organization.name}</strong>.
+              </p>
+              <InviteUserForm organization={organization} />
+            </div>
+          </Card>
+        </main>
+      </div>
     </>
   );
 }

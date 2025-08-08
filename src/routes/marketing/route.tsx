@@ -1,11 +1,13 @@
 import { Link, Outlet, redirect, type LoaderFunctionArgs } from "react-router";
 
-import { LoginForm, LogoutForm, SignupForm } from "@/components/auth-forms";
 import { GloablLoader } from "@/components/global-loader";
+import { LogoutForm } from "@/components/logout-form";
 import { ScrollRestoration } from "@/components/scroll-restoration";
 import { getUser } from "@/lib/auth";
 
 import { openLoginModal, openSignupModal } from "./client";
+import { LoginForm } from "./login/client";
+import { SignupForm } from "./signup/client";
 
 declare global {
   var login_modal: HTMLDialogElement;

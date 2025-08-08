@@ -5,29 +5,30 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition, useActionState, useState } from "react";
 
 import {
-  updateOrganizationAction,
   deleteOrganizationAction,
   leaveOrganizationAction,
+  updateOrganizationAction,
 } from "@/actions/organization/actions";
 import {
-  UpdateOrganizationFormSchema,
   DeleteOrganizationFormSchema,
   LeaveOrganizationFormSchema,
+  UpdateOrganizationFormSchema,
 } from "@/actions/organization/schema";
+import { Icon } from "@/components/icon";
 import {
-  InviteUserForm,
   DeleteInvitationForm,
+  InviteUserForm,
 } from "@/components/invitation-forms";
 import {
+  closeModal,
   Modal,
   ModalContent,
   openModal,
-  closeModal,
 } from "@/components/ui/modal";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
+import { Card } from "@/components/ui/card";
 
 interface OrganizationSettingsFormsProps {
-  isAdmin: boolean;
   organization: Organization;
   userRole: string;
   invitations: Array<{
@@ -51,40 +52,28 @@ export function OrganizationSettingsForms({
     <div className="grid gap-8">
       {/* General Settings */}
       {(userRole === "owner" || userRole === "admin") && (
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
+        <Card>
+          <div className="card-body space-y-4">
             <h2 className="card-title text-secondary mb-4">General Settings</h2>
             <UpdateOrganizationForm organization={organization} />
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Team Management */}
       {(userRole === "owner" || userRole === "admin") && (
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title text-secondary mb-4">Team Management</h2>
-            <p className="text-base-content/70 mb-4">
+        <Card>
+          <div className="card-body space-y-4">
+            <h2 className="card-title text-secondary">Team Management</h2>
+            <p className="text-neutral">
               Invite team members to collaborate on your organization.
             </p>
-            <div className="card-actions mb-6">
+            <div className="card-actions">
               <button
                 onClick={() => openModal("invite-modal")}
                 className="btn btn-primary"
               >
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
+                <Icon name="plus" className="h-4 w-4 mr-2" />
                 Invite User
               </button>
             </div>
@@ -180,15 +169,15 @@ export function OrganizationSettingsForms({
               </>
             )}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Danger Zone */}
       {userRole === "owner" ? (
-        <div className="card bg-base-100 shadow-xl border-2 border-error">
+        <Card className="border-error">
           <div className="card-body">
             <h2 className="card-title text-error mb-4">Danger Zone</h2>
-            <p className="text-base-content/70 mb-4">
+            <p className="text-neutral mb-4">
               Once you delete an organization, there is no going back. Please be
               certain.
             </p>
@@ -201,12 +190,12 @@ export function OrganizationSettingsForms({
               </button>
             </div>
           </div>
-        </div>
+        </Card>
       ) : (
-        <div className="card bg-base-100 shadow-xl border-2 border-error">
+        <Card className="border-error">
           <div className="card-body">
             <h2 className="card-title text-error mb-4">Danger Zone</h2>
-            <p className="text-base-content/70 mb-4">
+            <p className="text-neutral mb-4">
               Once you leave an organization, there is no going back. Please be
               certain.
             </p>
@@ -219,7 +208,7 @@ export function OrganizationSettingsForms({
               </button>
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Delete Modal */}
@@ -422,7 +411,7 @@ function UpdateOrganizationForm({
             className="input w-full"
           />
         </label>
-        <div className="text-xs text-base-content/60 mt-1">
+        <div className="text-xs text-neutral mt-1">
           Enter a URL for your organization's logo image
         </div>
         <div id={fields.logoUrl.errorId} className="text-error text-sm">
@@ -449,21 +438,9 @@ function UpdateOrganizationForm({
         {form.errors}
       </div>
 
-      {lastResult?.status === "success" && (
+      {lastResult && lastResult.status !== "error" && (
         <div className="alert alert-success">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <Icon name="check-circle" className="h-6 w-6" />
           <span>Organization settings updated successfully!</span>
         </div>
       )}
@@ -516,19 +493,7 @@ function DeleteOrganizationForm({
   return (
     <form {...getFormProps(form)} action={action} className="space-y-4">
       <div className="alert alert-warning">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="stroke-current shrink-0 h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-          />
-        </svg>
+        <Icon name="exclamation-triangle" className="h-6 w-6" />
         <span>
           This will permanently delete <strong>{organizationName}</strong> and
           all its data.
@@ -613,19 +578,7 @@ function LeaveOrganizationForm({
   return (
     <form {...getFormProps(form)} action={action} className="space-y-4">
       <div className="alert alert-warning">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="stroke-current shrink-0 h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-          />
-        </svg>
+        <Icon name="exclamation-triangle" className="h-6 w-6" />
         <span>
           This will permanently remove you from{" "}
           <strong>{organizationName}</strong>.

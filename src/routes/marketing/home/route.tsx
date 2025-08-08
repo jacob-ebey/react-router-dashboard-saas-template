@@ -1,3 +1,6 @@
+import { Icon } from "@/components/icon";
+import { Card } from "@/components/ui/card";
+
 import { openSignupModal } from "../client";
 
 export default function Home() {
@@ -14,7 +17,7 @@ export default function Home() {
               <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-6">
                 Revolutionize Your Productivity with AI-Powered Synergy
               </h1>
-              <p className="text-xl mb-8 text-base-content/80">
+              <p className="text-xl mb-8 text-neutral">
                 The only platform you'll ever need to disrupt your workflow,
                 leverage cutting-edge blockchain synergies, and scale your
                 mindset in the cloud. Now with 10x more AI!
@@ -81,7 +84,7 @@ export default function Home() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-primary">
                     🧠 AI Thought Leadership
@@ -95,9 +98,9 @@ export default function Home() {
                     <div className="badge badge-outline">Revolutionary</div>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-secondary">
                     ⚡ Quantum Productivity
@@ -111,9 +114,9 @@ export default function Home() {
                     <div className="badge badge-outline">Quantum-Ready</div>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-accent">
                     🔗 Blockchain Synergy
@@ -127,9 +130,9 @@ export default function Home() {
                     <div className="badge badge-outline">Crypto-Enabled</div>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-success">
                     🌐 Metaverse Integration
@@ -142,9 +145,9 @@ export default function Home() {
                     <div className="badge badge-outline">Metaverse-Ready</div>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-warning">
                     📊 Disruption Analytics
@@ -157,9 +160,9 @@ export default function Home() {
                     <div className="badge badge-outline">Data-Driven</div>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-error">
                     🚀 Scale-as-a-Service
@@ -173,7 +176,7 @@ export default function Home() {
                     <div className="badge badge-outline">Scalable</div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
@@ -189,7 +192,7 @@ export default function Home() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="card bg-base-200 shadow-xl">
+              <Card className="bg-base-200">
                 <div className="card-body">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">
@@ -244,9 +247,9 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-200 shadow-xl">
+              <Card className="bg-base-200">
                 <div className="card-body">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">
@@ -303,9 +306,9 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-200 shadow-xl">
+              <Card className="bg-base-200">
                 <div className="card-body">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">
@@ -360,7 +363,7 @@ export default function Home() {
                     />
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
@@ -373,7 +376,7 @@ export default function Home() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h3 className="card-title text-center">Aspiring Disruptor</h3>
                   <div className="text-center">
@@ -393,9 +396,9 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-primary text-primary-content shadow-2xl transform scale-105">
+              <Card className="bg-primary text-primary-content">
                 <div className="card-body">
                   <div className="badge badge-secondary absolute -top-3 -right-1 md:-top-3 md:-right-3">
                     Most Popular
@@ -418,9 +421,9 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card className="bg-base-100">
                 <div className="card-body">
                   <h3 className="card-title text-center">Unicorn Founder</h3>
                   <div className="text-center">
@@ -440,24 +443,12 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
 
             <div className="text-center mt-12">
               <div className="alert alert-info inline-flex">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="stroke-current shrink-0 w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
+                <Icon name="information-circle" className="h-6 w-6" />
                 <span>
                   All plans include our revolutionary 47-day money-back
                   guarantee!

@@ -1,9 +1,12 @@
 import { Link } from "react-router";
 
 import { AccessDenied } from "@/components/access-denied";
+import { Icon } from "@/components/icon";
+import { Card } from "@/components/ui/card";
 import { getDb } from "@/db";
 import {
   getOrganizationBySlugSecure,
+  getUserOrgRole,
   getUsersByOrganization,
 } from "@/db/queries/organization";
 import { requireUser } from "@/lib/auth";
@@ -21,9 +24,12 @@ export default async function OrganizationDetail({
     params.orgSlug,
     user.id
   );
+
   if (!organization) {
     return <AccessDenied />;
   }
+
+  const userRole = await getUserOrgRole(db, user.id, organization.id);
 
   // Get members of the organization
   const members = await getUsersByOrganization(db, organization.id);
@@ -42,38 +48,15 @@ export default async function OrganizationDetail({
           {/* Back navigation */}
           <div className="mb-6">
             <Link to="/app" className="btn btn-ghost btn-sm">
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <Icon name="chevron-left" className="h-4 w-4 mr-2" />
               Back to Organizations
             </Link>
           </div>
 
           {/* Starter Project Notice */}
           <div className="alert alert-info mb-6">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="stroke-current shrink-0 w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <Icon name="information-circle" className="h-6 w-6 self-start" />
+
             <div>
               <h3 className="font-bold">This is a starter template</h3>
               <div className="text-sm">
@@ -94,7 +77,7 @@ export default async function OrganizationDetail({
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Main Info Card */}
             <div className="lg:col-span-2">
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="flex items-center gap-4 mb-4">
                     {organization.logoUrl && (
@@ -116,35 +99,29 @@ export default async function OrganizationDetail({
                   {/* Organization Details */}
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-sm font-semibold text-base-content/70 uppercase tracking-wider mb-2">
+                      <h3 className="text-sm font-semibold text-neutral uppercase tracking-wider mb-2">
                         Organization Details
                       </h3>
                       <div className="grid gap-3">
                         <div>
-                          <span className="text-sm text-base-content/70">
-                            Slug:
-                          </span>
+                          <span className="text-sm text-neutral">Slug:</span>
                           <p className="font-mono">{organization.slug}</p>
                         </div>
                         {organization.email && (
                           <div>
-                            <span className="text-sm text-base-content/70">
-                              Email:
-                            </span>
+                            <span className="text-sm text-neutral">Email:</span>
                             <p>{organization.email}</p>
                           </div>
                         )}
                         {organization.phone && (
                           <div>
-                            <span className="text-sm text-base-content/70">
-                              Phone:
-                            </span>
+                            <span className="text-sm text-neutral">Phone:</span>
                             <p>{organization.phone}</p>
                           </div>
                         )}
                         {organization.website && (
                           <div>
-                            <span className="text-sm text-base-content/70">
+                            <span className="text-sm text-neutral">
                               Website:
                             </span>
                             <p>
@@ -161,7 +138,7 @@ export default async function OrganizationDetail({
                         )}
                         {organization.address && (
                           <div>
-                            <span className="text-sm text-base-content/70">
+                            <span className="text-sm text-neutral">
                               Address:
                             </span>
                             <p className="whitespace-pre-wrap">
@@ -170,9 +147,7 @@ export default async function OrganizationDetail({
                           </div>
                         )}
                         <div>
-                          <span className="text-sm text-base-content/70">
-                            Created:
-                          </span>
+                          <span className="text-sm text-neutral">Created:</span>
                           <p>
                             {new Date(
                               organization.createdAt
@@ -189,35 +164,17 @@ export default async function OrganizationDetail({
                       to={`/app/organization/${organization.slug}/settings`}
                       className="btn btn-primary"
                     >
-                      <svg
-                        className="w-4 h-4 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
+                      <Icon name="cog-6-tooth" className="h-4 w-4 mr-2" />
                       Organization Settings
                     </Link>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Members Card */}
             <div className="lg:col-span-1">
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <h2 className="card-title text-secondary">Team Members</h2>
                   <div className="divider"></div>
@@ -241,7 +198,7 @@ export default async function OrganizationDetail({
                           <p className="font-medium">
                             {member.name || member.email}
                           </p>
-                          <p className="text-sm text-base-content/70">
+                          <p className="text-sm text-neutral">
                             {member.membership.role}
                             {member.id === currentUserId && (
                               <span className="badge badge-primary badge-sm ml-2">
@@ -254,26 +211,18 @@ export default async function OrganizationDetail({
                     ))}
                   </div>
 
-                  <div className="card-actions justify-end mt-4">
-                    <Link to="invite" className="btn btn-sm btn-outline">
-                      <svg
-                        className="w-4 h-4 mr-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
-                      Invite Members
-                    </Link>
-                  </div>
+                  {userRole === "owner" ||
+                  userRole === "admin" ||
+                  userRole === "manager" ? (
+                    <div className="card-actions justify-end mt-4">
+                      <Link to="invite" className="btn btn-sm btn-outline">
+                        <Icon name="plus" className="h-4 w-4 mr-1" />
+                        Invite Members
+                      </Link>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
 
@@ -283,67 +232,67 @@ export default async function OrganizationDetail({
               Example Features to Build
             </h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="text-4xl mb-2">📊</div>
                   <h3 className="card-title">Projects & Tasks</h3>
-                  <p className="text-base-content/70">
+                  <p className="text-neutral">
                     Add project management capabilities with tasks, boards, and
                     timelines.
                   </p>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="text-4xl mb-2">💬</div>
                   <h3 className="card-title">Team Chat</h3>
-                  <p className="text-base-content/70">
+                  <p className="text-neutral">
                     Implement real-time messaging and collaboration features.
                   </p>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="text-4xl mb-2">📈</div>
                   <h3 className="card-title">Analytics</h3>
-                  <p className="text-base-content/70">
+                  <p className="text-neutral">
                     Track organization metrics, usage, and performance
                     indicators.
                   </p>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="text-4xl mb-2">🔐</div>
                   <h3 className="card-title">Permissions</h3>
-                  <p className="text-base-content/70">
+                  <p className="text-neutral">
                     Fine-grained access control and role management.
                   </p>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="text-4xl mb-2">💳</div>
                   <h3 className="card-title">Billing</h3>
-                  <p className="text-base-content/70">
+                  <p className="text-neutral">
                     Subscription management and payment processing.
                   </p>
                 </div>
-              </div>
+              </Card>
 
-              <div className="card bg-base-100 shadow-xl">
+              <Card>
                 <div className="card-body">
                   <div className="text-4xl mb-2">🔔</div>
                   <h3 className="card-title">Notifications</h3>
-                  <p className="text-base-content/70">
+                  <p className="text-neutral">
                     Email and in-app notifications for important events.
                   </p>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </div>
