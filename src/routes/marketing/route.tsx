@@ -5,7 +5,7 @@ import { LogoutForm } from "@/components/logout-form";
 import { ScrollRestoration } from "@/components/scroll-restoration";
 import { getUser } from "@/lib/auth";
 
-import { openLoginModal, openSignupModal } from "./client";
+import { openLoginModal, openSignupModal } from "./client-on";
 import { LoginForm } from "./login/client";
 import { SignupForm } from "./signup/client";
 import { Modal, ModalContent } from "@/components/ui/modal";
@@ -24,7 +24,9 @@ export function loader({ request }: LoaderFunctionArgs) {
   }
 }
 
-export default function MarketingLayout() {
+export default Outlet;
+
+export function Layout() {
   const user = getUser();
 
   const loggedIn = Boolean(user);

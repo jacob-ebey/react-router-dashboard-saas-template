@@ -21,13 +21,13 @@ export function SignupForm() {
 
   return (
     <Form action={action} form={form}>
+      <input type="hidden" name={fields.redirectTo.name} value={redirectTo} />
       <input
         hidden
         autoComplete="username"
         name="username"
         defaultValue="user"
       />
-      <input type="hidden" name={fields.redirectTo.name} value={redirectTo} />
       <Input
         field={fields.name}
         label="Display Name"

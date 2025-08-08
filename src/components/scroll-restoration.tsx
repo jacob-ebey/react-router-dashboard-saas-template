@@ -380,3 +380,25 @@ function usePageHide(
     };
   }, [callback, capture]);
 }
+
+export function ScrollRestorationDiv({
+  ref: propsRef,
+  ...props
+}: React.ComponentProps<"div">) {
+  const localRef = React.useRef<HTMLDivElement>(null);
+  const ref = propsRef ?? localRef;
+
+  if (!props.id) {
+    throw new Error("id is required");
+  }
+
+  return (
+    <>
+      <div {...props} ref={ref} />
+      <ScrollRestoration
+        getKey={({ key }) => `${props.id}-${key}`}
+        scrollRef={ref}
+      />
+    </>
+  );
+}

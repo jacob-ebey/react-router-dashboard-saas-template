@@ -1,46 +1,17 @@
 "use client";
 
-import { startTransition, useActionState, useRef } from "react";
+import { startTransition, useActionState } from "react";
 
 import {
   acceptInvitation,
   declineInvitation,
 } from "@/actions/invitation/actions";
 import { Icon } from "@/components/icon";
-import { ScrollRestoration } from "@/components/scroll-restoration";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
 import { Card } from "@/components/ui/card";
 import { Modal, ModalContent } from "@/components/ui/modal";
 
-export function openSidebar() {
-  sidebar.showModal();
-}
-
-export function closeSidebar() {
-  sidebar.close();
-}
-
-export function ScrollRestorationDiv({
-  ref: propsRef,
-  ...props
-}: React.ComponentProps<"div">) {
-  const localRef = useRef<HTMLDivElement>(null);
-  const ref = propsRef ?? localRef;
-
-  if (!props.id) {
-    throw new Error("id is required");
-  }
-
-  return (
-    <>
-      <div {...props} ref={ref} />
-      <ScrollRestoration
-        getKey={({ key }) => `${props.id}-${key}`}
-        scrollRef={ref}
-      />
-    </>
-  );
-}
+import { openNotifications } from "./client-on";
 
 declare global {
   var notifications_dialog: HTMLDialogElement;
@@ -52,14 +23,6 @@ interface NotificationsPanelProps {
     organization: Organization;
     invitedBy: Pick<User, "id" | "email" | "name" | "avatar">;
   }>;
-}
-
-export function openNotifications() {
-  notifications_dialog.showModal();
-}
-
-export function closeNotifications() {
-  notifications_dialog.close();
 }
 
 export function NotificationsPanel({ invitations }: NotificationsPanelProps) {

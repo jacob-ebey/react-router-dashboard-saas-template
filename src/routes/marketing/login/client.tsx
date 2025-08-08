@@ -21,12 +21,7 @@ export function LoginForm() {
 
   return (
     <Form action={action} form={form}>
-      <input
-        hidden
-        autoComplete="username"
-        name="username"
-        defaultValue="user"
-      />
+      <input type="hidden" name={fields.redirectTo.name} value={redirectTo} />
       <input
         hidden
         autoComplete="username"

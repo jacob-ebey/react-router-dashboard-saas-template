@@ -3,17 +3,15 @@ import { Link, Outlet, type RouteComponentProps } from "react-router";
 import { GloablLoader } from "@/components/global-loader";
 import { Icon } from "@/components/icon";
 import { LogoutForm } from "@/components/logout-form";
+import { ScrollRestorationDiv } from "@/components/scroll-restoration";
 import { getDb } from "@/db";
 import { getUserPendingInvitations } from "@/db/queries/invitation";
 import { getUserById } from "@/db/queries/user";
 import { requireUser, requireUserMiddleware } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
-import {
-  NotificationsPanel,
-  openSidebar,
-  ScrollRestorationDiv,
-} from "./client";
+import { NotificationsPanel } from "./client";
+import { openSidebar } from "./client-on";
 import { getServerHandle } from "./handle";
 
 declare global {

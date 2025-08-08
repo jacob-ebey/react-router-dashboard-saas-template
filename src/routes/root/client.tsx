@@ -4,7 +4,7 @@ import { isRouteErrorResponse, useRouteError } from "react-router";
 
 import { Icons } from "@/components/icon";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Document({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>

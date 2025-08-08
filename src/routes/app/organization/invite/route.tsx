@@ -2,7 +2,6 @@ import { Link } from "react-router";
 
 import { AccessDenied } from "@/components/access-denied";
 import { Icon } from "@/components/icon";
-import { InviteUserForm } from "@/components/invitation-forms";
 import { Card } from "@/components/ui/card";
 import { getDb } from "@/db";
 import {
@@ -10,6 +9,8 @@ import {
   getUserOrgRole,
 } from "@/db/queries/organization";
 import { requireUser } from "@/lib/auth";
+
+import { InviteUserForm } from "./client";
 
 export default async function InviteUser({
   params,

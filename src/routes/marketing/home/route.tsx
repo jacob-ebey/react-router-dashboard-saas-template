@@ -1,7 +1,7 @@
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
 
-import { openSignupModal } from "../client";
+import { openSignupModal } from "../client-on";
 
 export default function Home() {
   return (

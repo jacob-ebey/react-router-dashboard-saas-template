@@ -1,7 +1,6 @@
 "use client";
 
-import { parseWithZod } from "@conform-to/zod/v4";
-import { startTransition, useActionState, useState } from "react";
+import { useActionState, useState } from "react";
 
 import {
   deleteOrganizationAction,
@@ -15,10 +14,6 @@ import {
 } from "@/actions/organization/schema";
 import { Form, FormErrors, Input, Textarea, useForm } from "@/components/form";
 import { Icon } from "@/components/icon";
-import {
-  DeleteInvitationForm,
-  InviteUserForm,
-} from "@/components/invitation-forms";
 import { Card } from "@/components/ui/card";
 import {
   closeModal,
@@ -27,6 +22,11 @@ import {
   openModal,
 } from "@/components/ui/modal";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
+
+import { deleteInvitationAndRemoveUser } from "@/actions/invitation/actions";
+import { DeleteInvitationFormSchema } from "@/actions/invitation/schema";
+
+import { InviteUserForm } from "../invite/client";
 
 interface OrganizationSettingsFormsProps {
   organization: Organization;
@@ -274,6 +274,78 @@ export function OrganizationSettingsForms({
         </ModalContent>
       </Modal>
     </div>
+  );
+}
+
+function DeleteInvitationForm({
+  invitationId,
+  invitationEmail,
+  isAccepted,
+}: {
+  invitationId: string;
+  invitationEmail: string;
+  isAccepted: boolean;
+}) {
+  const [lastResult, action, pending] = useActionState(
+    deleteInvitationAndRemoveUser,
+    undefined
+  );
+
+  const [form, _fields] = useForm({
+    action,
+    lastResult,
+    schema: DeleteInvitationFormSchema,
+    onSubmit: closeModal.bind(null, "delete-invitation-modal"),
+  });
+
+  return (
+    <Form action={action} form={form}>
+      <input type="hidden" name="invitationId" value={invitationId} />
+
+      <div className="alert alert-error">
+        <Icon name="exclamation-triangle" className="h-6 w-6 shrink-0" />
+
+        <div>
+          <p>
+            Are you sure you want to delete the invitation for{" "}
+            <strong>{invitationEmail}</strong>?
+          </p>
+          {isAccepted && (
+            <p className="mt-2">
+              <strong>Warning:</strong> This invitation has been accepted. The
+              user will also be removed from the organization.
+            </p>
+          )}
+          <p className="mt-2 text-sm">This action cannot be undone.</p>
+        </div>
+      </div>
+
+      <div id={form.errorId} className="text-error text-sm">
+        {form.errors}
+      </div>
+
+      <div className="flex gap-2 justify-end">
+        <button
+          type="button"
+          className="btn btn-ghost"
+          disabled={pending}
+          onClick={closeModal.bind(null, "delete-invitation-modal")}
+        >
+          Cancel
+        </button>
+
+        <button type="submit" className="btn btn-error" disabled={pending}>
+          {pending ? (
+            <span
+              className="loading loading-dots loading-md"
+              aria-label="Deleting invitation..."
+            />
+          ) : (
+            "Delete Invitation"
+          )}
+        </button>
+      </div>
+    </Form>
   );
 }
 
