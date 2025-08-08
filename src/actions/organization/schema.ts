@@ -48,6 +48,7 @@ export const UpdateOrganizationFormSchema = z.object({
     .string()
     .check(z.url({ error: "Please enter a valid logo URL." }))
     .optional(),
+  organizationId: z.string(),
 });
 
 export type UpdateOrganizationFormData = z.infer<
@@ -55,12 +56,14 @@ export type UpdateOrganizationFormData = z.infer<
 >;
 
 export const DeleteOrganizationFormSchema = z.object({
+  organizationId: z.string(),
   confirmationText: z.literal("DELETE", {
     error: "Please type DELETE to confirm.",
   }),
 });
 
 export const LeaveOrganizationFormSchema = z.object({
+  organizationId: z.string(),
   confirmationText: z.literal("LEAVE", {
     error: "Please type LEAVE to confirm.",
   }),

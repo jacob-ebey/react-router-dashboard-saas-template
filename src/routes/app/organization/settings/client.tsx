@@ -1,6 +1,5 @@
 "use client";
 
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { startTransition, useActionState, useState } from "react";
 
@@ -14,11 +13,13 @@ import {
   LeaveOrganizationFormSchema,
   UpdateOrganizationFormSchema,
 } from "@/actions/organization/schema";
+import { Form, FormErrors, Input, Textarea, useForm } from "@/components/form";
 import { Icon } from "@/components/icon";
 import {
   DeleteInvitationForm,
   InviteUserForm,
 } from "@/components/invitation-forms";
+import { Card } from "@/components/ui/card";
 import {
   closeModal,
   Modal,
@@ -26,7 +27,6 @@ import {
   openModal,
 } from "@/components/ui/modal";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
-import { Card } from "@/components/ui/card";
 
 interface OrganizationSettingsFormsProps {
   organization: Organization;
@@ -288,9 +288,7 @@ function UpdateOrganizationForm({
   );
 
   const [form, fields] = useForm({
-    lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
+    action,
     defaultValue: {
       name: organization.name,
       email: organization.email || "",
@@ -299,19 +297,18 @@ function UpdateOrganizationForm({
       address: organization.address || "",
       logoUrl: organization.logoUrl || "",
     },
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: UpdateOrganizationFormSchema });
-    },
-    onSubmit(event, { formData }) {
-      // Add organization ID to form data
-      formData.append("organizationId", organization.id);
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    lastResult,
+    schema: UpdateOrganizationFormSchema,
   });
 
   return (
-    <form {...getFormProps(form)} action={action} className="grid gap-4">
+    <Form action={action} form={form}>
+      <input
+        type="hidden"
+        name={fields.organizationId.name}
+        value={organization.id}
+      />
+
       {/* Logo Preview */}
       {fields.logoUrl.value && (
         <div className="flex justify-center mb-4">
@@ -324,99 +321,56 @@ function UpdateOrganizationForm({
       )}
 
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="grid gap-1">
-          <label className="floating-label">
-            <span>Organization Name *</span>
-            <input
-              {...getInputProps(fields.name, { type: "text" })}
-              placeholder="Acme Construction Inc."
-              className="input w-full"
-              required
-            />
-          </label>
-          <div id={fields.name.errorId} className="text-error text-sm">
-            {fields.name.errors}
-          </div>
-        </div>
+        <Input
+          field={fields.name}
+          type="text"
+          label="Organization Name"
+          placeholder="Acme Construction Inc."
+          required
+        />
 
-        <div className="grid gap-1">
-          <label className="floating-label">
-            <span>Email</span>
-            <input
-              {...getInputProps(fields.email, { type: "email" })}
-              placeholder="contact@acme.com"
-              className="input w-full"
-            />
-          </label>
-          <div id={fields.email.errorId} className="text-error text-sm">
-            {fields.email.errors}
-          </div>
-        </div>
+        <Input
+          field={fields.email}
+          type="email"
+          label="Email"
+          placeholder="contact@acme.com"
+          required
+        />
 
-        <div className="grid gap-1">
-          <label className="floating-label">
-            <span>Phone</span>
-            <input
-              {...getInputProps(fields.phone, { type: "tel" })}
-              placeholder="+1 (555) 123-4567"
-              className="input w-full"
-            />
-          </label>
-          <div id={fields.phone.errorId} className="text-error text-sm">
-            {fields.phone.errors}
-          </div>
-        </div>
+        <Input
+          field={fields.phone}
+          type="tel"
+          label="Phone"
+          placeholder="+1 (555) 123-4567"
+          required
+        />
 
-        <div className="grid gap-1">
-          <label className="floating-label">
-            <span>Website</span>
-            <input
-              {...getInputProps(fields.website, { type: "url" })}
-              placeholder="https://acme.com"
-              className="input w-full"
-            />
-          </label>
-          <div id={fields.website.errorId} className="text-error text-sm">
-            {fields.website.errors}
-          </div>
-        </div>
+        <Input
+          field={fields.website}
+          type="url"
+          label="Website"
+          placeholder="https://acme.com"
+          required
+        />
       </div>
 
-      <div className="grid gap-1">
-        <label className="floating-label">
-          <span>Logo URL</span>
-          <input
-            {...getInputProps(fields.logoUrl, { type: "url" })}
-            placeholder="https://example.com/logo.png"
-            className="input w-full"
-          />
-        </label>
-        <div className="text-xs text-neutral mt-1">
-          Enter a URL for your organization's logo image
-        </div>
-        <div id={fields.logoUrl.errorId} className="text-error text-sm">
-          {fields.logoUrl.errors}
-        </div>
-      </div>
+      <Input
+        field={fields.logoUrl}
+        type="url"
+        label="Logo URL"
+        placeholder="https://example.com/logo.png"
+        required
+      />
 
-      <div className="grid gap-1">
-        <label className="floating-label">
-          <span>Address</span>
-          <textarea
-            {...getInputProps(fields.address, { type: "text" })}
-            placeholder="123 Main St, City, State 12345"
-            className="textarea w-full"
-            rows={3}
-          />
-        </label>
-        <div id={fields.address.errorId} className="text-error text-sm">
-          {fields.address.errors}
-        </div>
-      </div>
+      <Textarea
+        field={fields.address}
+        label="Address"
+        placeholder="123 Main St, City, State 12345"
+        rows={3}
+        required
+      />
 
-      <div id={form.errorId} className="text-error text-sm">
-        {form.errors}
-      </div>
+      <FormErrors form={form} />
 
       {lastResult && lastResult.status !== "error" && (
         <div className="alert alert-success">
@@ -437,7 +391,7 @@ function UpdateOrganizationForm({
           )}
         </button>
       </div>
-    </form>
+    </Form>
   );
 }
 
@@ -456,22 +410,19 @@ function DeleteOrganizationForm({
   );
 
   const [form, fields] = useForm({
+    action,
     lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: DeleteOrganizationFormSchema });
-    },
-    onSubmit(event, { formData }) {
-      // Add organization ID to form data
-      formData.append("organizationId", organizationId);
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: DeleteOrganizationFormSchema,
   });
 
   return (
-    <form {...getFormProps(form)} action={action} className="space-y-4">
+    <Form action={action} form={form}>
+      <input
+        type="hidden"
+        name={fields.organizationId.name}
+        value={organizationId}
+      />
+
       <div className="alert alert-warning">
         <Icon name="exclamation-triangle" className="h-6 w-6" />
         <span>
@@ -480,27 +431,15 @@ function DeleteOrganizationForm({
         </span>
       </div>
 
-      <div className="grid gap-1">
-        <label className="floating-label">
-          <span>Type DELETE to confirm</span>
-          <input
-            {...getInputProps(fields.confirmationText, { type: "text" })}
-            placeholder="DELETE"
-            className="input w-full"
-            autoComplete="off"
-          />
-        </label>
-        <div
-          id={fields.confirmationText.errorId}
-          className="text-error text-sm"
-        >
-          {fields.confirmationText.errors}
-        </div>
-      </div>
+      <Input
+        field={fields.confirmationText}
+        type="text"
+        label="Confirmation Text"
+        placeholder="DELETE"
+        required
+      />
 
-      <div id={form.errorId} className="text-error text-sm">
-        {form.errors}
-      </div>
+      <FormErrors form={form} />
 
       <div className="modal-action">
         <button
@@ -522,7 +461,7 @@ function DeleteOrganizationForm({
           )}
         </button>
       </div>
-    </form>
+    </Form>
   );
 }
 
@@ -541,22 +480,19 @@ function LeaveOrganizationForm({
   );
 
   const [form, fields] = useForm({
+    action,
     lastResult,
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: LeaveOrganizationFormSchema });
-    },
-    onSubmit(event, { formData }) {
-      // Add organization ID to form data
-      formData.append("organizationId", organizationId);
-      startTransition(() => action(formData));
-      event.preventDefault();
-    },
+    schema: LeaveOrganizationFormSchema,
   });
 
   return (
-    <form {...getFormProps(form)} action={action} className="space-y-4">
+    <Form action={action} form={form}>
+      <input
+        type="hidden"
+        name={fields.organizationId.name}
+        value={organizationId}
+      />
+
       <div className="alert alert-warning">
         <Icon name="exclamation-triangle" className="h-6 w-6" />
         <span>
@@ -565,27 +501,15 @@ function LeaveOrganizationForm({
         </span>
       </div>
 
-      <div className="grid gap-1">
-        <label className="floating-label">
-          <span>Type LEAVE to confirm</span>
-          <input
-            {...getInputProps(fields.confirmationText, { type: "text" })}
-            placeholder="LEAVE"
-            className="input w-full"
-            autoComplete="off"
-          />
-        </label>
-        <div
-          id={fields.confirmationText.errorId}
-          className="text-error text-sm"
-        >
-          {fields.confirmationText.errors}
-        </div>
-      </div>
+      <Input
+        field={fields.confirmationText}
+        type="text"
+        label="Confirmation Text"
+        placeholder="LEAVE"
+        required
+      />
 
-      <div id={form.errorId} className="text-error text-sm">
-        {form.errors}
-      </div>
+      <FormErrors form={form} />
 
       <div className="modal-action">
         <button
@@ -607,6 +531,6 @@ function LeaveOrganizationForm({
           )}
         </button>
       </div>
-    </form>
+    </Form>
   );
 }
