@@ -60,6 +60,12 @@ export const DeleteOrganizationFormSchema = z.object({
   }),
 });
 
+export const LeaveOrganizationFormSchema = z.object({
+  confirmationText: z.literal("LEAVE", {
+    error: "Please type LEAVE to confirm.",
+  }),
+});
+
 export type DeleteOrganizationFormData = z.infer<
   typeof DeleteOrganizationFormSchema
 >;
@@ -69,6 +75,4 @@ export const RemoveMemberFormSchema = z.object({
   organizationId: z.string().uuid(),
 });
 
-export type RemoveMemberFormData = z.infer<
-  typeof RemoveMemberFormSchema
->;
+export type RemoveMemberFormData = z.infer<typeof RemoveMemberFormSchema>;

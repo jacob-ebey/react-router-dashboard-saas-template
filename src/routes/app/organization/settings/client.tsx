@@ -7,10 +7,12 @@ import { startTransition, useActionState, useState } from "react";
 import {
   updateOrganizationAction,
   deleteOrganizationAction,
+  leaveOrganizationAction,
 } from "@/actions/organization/actions";
 import {
   UpdateOrganizationFormSchema,
   DeleteOrganizationFormSchema,
+  LeaveOrganizationFormSchema,
 } from "@/actions/organization/schema";
 import {
   InviteUserForm,
@@ -25,6 +27,7 @@ import {
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
 
 interface OrganizationSettingsFormsProps {
+  isAdmin: boolean;
   organization: Organization;
   userRole: string;
   invitations: Array<{
@@ -47,12 +50,14 @@ export function OrganizationSettingsForms({
   return (
     <div className="grid gap-8">
       {/* General Settings */}
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title text-secondary mb-4">General Settings</h2>
-          <UpdateOrganizationForm organization={organization} />
+      {(userRole === "owner" || userRole === "admin") && (
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title text-secondary mb-4">General Settings</h2>
+            <UpdateOrganizationForm organization={organization} />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Team Management */}
       {(userRole === "owner" || userRole === "admin") && (
@@ -179,7 +184,7 @@ export function OrganizationSettingsForms({
       )}
 
       {/* Danger Zone */}
-      {userRole === "owner" && (
+      {userRole === "owner" ? (
         <div className="card bg-base-100 shadow-xl border-2 border-error">
           <div className="card-body">
             <h2 className="card-title text-error mb-4">Danger Zone</h2>
@@ -193,6 +198,24 @@ export function OrganizationSettingsForms({
                 className="btn btn-error"
               >
                 Delete Organization
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="card bg-base-100 shadow-xl border-2 border-error">
+          <div className="card-body">
+            <h2 className="card-title text-error mb-4">Danger Zone</h2>
+            <p className="text-base-content/70 mb-4">
+              Once you leave an organization, there is no going back. Please be
+              certain.
+            </p>
+            <div className="card-actions">
+              <button
+                onClick={() => openModal("leave-organization-modal")}
+                className="btn btn-error"
+              >
+                Leave Organization
               </button>
             </div>
           </div>
@@ -211,6 +234,26 @@ export function OrganizationSettingsForms({
             organizationId={organization.id}
             organizationName={organization.name}
             onCancel={() => closeModal("delete-organization-modal")}
+          />
+        </ModalContent>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </Modal>
+
+      {/* Leave Modal */}
+      <Modal id="leave-organization-modal" position="end">
+        <ModalContent closeButton="right">
+          <h3 className="font-bold text-lg text-error">Leave Organization</h3>
+          <p className="py-4">
+            Are you sure you want to leave <strong>{organization.name}</strong>?
+            This action cannot be undone and will remove you from the
+            organization.
+          </p>
+          <LeaveOrganizationForm
+            organizationId={organization.id}
+            organizationName={organization.name}
+            onCancel={() => closeModal("leave-organization-modal")}
           />
         </ModalContent>
         <form method="dialog" className="modal-backdrop">
@@ -531,6 +574,103 @@ function DeleteOrganizationForm({
             />
           ) : (
             "Delete Organization"
+          )}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function LeaveOrganizationForm({
+  organizationId,
+  organizationName,
+  onCancel,
+}: {
+  organizationId: string;
+  organizationName: string;
+  onCancel: () => void;
+}) {
+  const [lastResult, action, pending] = useActionState(
+    leaveOrganizationAction,
+    undefined
+  );
+
+  const [form, fields] = useForm({
+    lastResult,
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: LeaveOrganizationFormSchema });
+    },
+    onSubmit(event, { formData }) {
+      // Add organization ID to form data
+      formData.append("organizationId", organizationId);
+      startTransition(() => action(formData));
+      event.preventDefault();
+    },
+  });
+
+  return (
+    <form {...getFormProps(form)} action={action} className="space-y-4">
+      <div className="alert alert-warning">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="stroke-current shrink-0 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+        <span>
+          This will permanently remove you from{" "}
+          <strong>{organizationName}</strong>.
+        </span>
+      </div>
+
+      <div className="grid gap-1">
+        <label className="floating-label">
+          <span>Type LEAVE to confirm</span>
+          <input
+            {...getInputProps(fields.confirmationText, { type: "text" })}
+            placeholder="LEAVE"
+            className="input w-full"
+            autoComplete="off"
+          />
+        </label>
+        <div
+          id={fields.confirmationText.errorId}
+          className="text-error text-sm"
+        >
+          {fields.confirmationText.errors}
+        </div>
+      </div>
+
+      <div id={form.errorId} className="text-error text-sm">
+        {form.errors}
+      </div>
+
+      <div className="modal-action">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="btn btn-ghost"
+          disabled={pending}
+        >
+          Cancel
+        </button>
+        <button type="submit" className="btn btn-error" disabled={pending}>
+          {pending ? (
+            <span
+              className="loading loading-dots loading-md"
+              aria-label="Leaving organization..."
+            />
+          ) : (
+            "Leave Organization"
           )}
         </button>
       </div>

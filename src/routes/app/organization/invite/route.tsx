@@ -1,11 +1,13 @@
 import { Link } from "react-router";
+
+import { AccessDenied } from "@/components/access-denied";
+import { InviteUserForm } from "@/components/invitation-forms";
 import { getDb } from "@/db";
 import {
   getOrganizationBySlugSecure,
   getUserOrgRole,
 } from "@/db/queries/organization";
 import { requireUser } from "@/lib/auth";
-import { InviteUserForm } from "@/components/invitation-forms";
 
 export default async function InviteUser({
   params,
@@ -27,9 +29,7 @@ export default async function InviteUser({
   // Check if user has permission to invite
   const userRole = await getUserOrgRole(db, user.id, organization.id);
   if (userRole !== "owner" && userRole !== "admin") {
-    throw new Error(
-      "You don't have permission to invite users to this organization"
-    );
+    return <AccessDenied />;
   }
 
   return (

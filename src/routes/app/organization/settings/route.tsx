@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 
+import { AccessDenied } from "@/components/access-denied";
 import { getDb } from "@/db";
 import { getOrganizationInvitations } from "@/db/queries/invitation";
 import {
@@ -18,16 +19,17 @@ export default async function OrganizationSettings({
   const user = requireUser();
   const db = getDb();
 
-  const organization = await getOrganizationBySlugSecure(db, params.orgSlug, user.id);
+  const organization = await getOrganizationBySlugSecure(
+    db,
+    params.orgSlug,
+    user.id
+  );
   if (!organization) {
-    throw new Error("Organization not found or access denied");
+    return <AccessDenied />;
   }
 
   // Check if user has permission to view settings
   const userRole = await getUserOrgRole(db, user.id, organization.id);
-  if (userRole !== "owner" && userRole !== "admin") {
-    throw new Error("You don't have permission to view organization settings");
-  }
 
   // Fetch invitations if user can manage them
   const invitations =

@@ -1,5 +1,9 @@
 import type { Database } from "../index";
-import { organizations, organizationMembers } from "../schema";
+import {
+  organizations,
+  organizationMembers,
+  organizationInvitations,
+} from "../schema";
 import type {
   NewOrganization,
   Organization,
@@ -88,14 +92,33 @@ export async function removeUserFromOrganization(
   organizationId: string,
   userId: string
 ): Promise<boolean> {
-  const result = await db
-    .delete(organizationMembers)
-    .where(
-      and(
-        eq(organizationMembers.organizationId, organizationId),
-        eq(organizationMembers.userId, userId)
-      )
-    );
+  const user = await db.query.users.findFirst({
+    where: (users) => eq(users.id, userId),
+  });
+
+  if (!user) {
+    return false;
+  }
+
+  const result = await db.transaction(async (tx) => {
+    await tx
+      .delete(organizationInvitations)
+      .where(
+        and(
+          eq(organizationInvitations.organizationId, organizationId),
+          eq(organizationInvitations.email, user.email)
+        )
+      );
+
+    return await tx
+      .delete(organizationMembers)
+      .where(
+        and(
+          eq(organizationMembers.organizationId, organizationId),
+          eq(organizationMembers.userId, userId)
+        )
+      );
+  });
 
   return result.rowCount === 1;
 }

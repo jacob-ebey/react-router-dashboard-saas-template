@@ -6,11 +6,11 @@ import { redirect } from "react-router";
 
 import { getDb } from "@/db";
 import {
-  createOrganization,
   addUserToOrganization,
-  updateOrganization,
+  createOrganization,
   deleteOrganization,
   removeUserFromOrganization,
+  updateOrganization,
 } from "@/db/mutations/organization";
 import {
   getOrganizationBySlug,
@@ -19,9 +19,10 @@ import {
 import { requireUser } from "@/lib/auth";
 import {
   CreateOrganizationFormSchema,
-  UpdateOrganizationFormSchema,
   DeleteOrganizationFormSchema,
+  LeaveOrganizationFormSchema,
   RemoveMemberFormSchema,
+  UpdateOrganizationFormSchema,
 } from "./schema";
 
 export async function createOrganizationAction(
@@ -175,6 +176,56 @@ export async function deleteOrganizationAction(
     console.error("Failed to delete organization:", error);
     return submission.reply({
       formErrors: ["Failed to delete organization. Please try again."],
+    });
+  }
+}
+
+export async function leaveOrganizationAction(
+  _: SubmissionResult | undefined,
+  formData: FormData
+): Promise<SubmissionResult> {
+  const user = requireUser();
+  const organizationId = formData.get("organizationId") as string;
+
+  const submission = parseWithZod(formData, {
+    schema: LeaveOrganizationFormSchema,
+  });
+
+  if (submission.status !== "success") {
+    return submission.reply();
+  }
+
+  const db = getDb();
+
+  try {
+    // Check if user has permission to leave the organization
+    const userRole = await getUserOrgRole(db, user.id, organizationId);
+    if (userRole !== "member") {
+      return submission.reply({
+        formErrors: ["You don't have permission to leave this organization."],
+      });
+    }
+
+    // Remove the user from the organization
+    const removed = await removeUserFromOrganization(
+      db,
+      organizationId,
+      user.id
+    );
+
+    if (!removed) {
+      return submission.reply({
+        formErrors: ["Failed to leave organization. Organization not found."],
+      });
+    }
+
+    redirect("/app");
+
+    return submission.reply({ resetForm: true });
+  } catch (error) {
+    console.error("Failed to leave organization:", error);
+    return submission.reply({
+      formErrors: ["Failed to leave organization. Please try again."],
     });
   }
 }

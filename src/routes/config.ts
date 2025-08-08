@@ -46,22 +46,21 @@ export function routes() {
             {
               id: "app.organization",
               path: "organization",
-              lazy: () => import("./app/organization/route"),
               children: [
                 {
                   id: "app.organization.detail",
                   path: ":orgSlug",
-                  lazy: () => import("./app/organization/$orgSlug/route"),
+                  lazy: () => import("./app/organization/route"),
                 },
                 {
                   id: "app.organization.settings",
                   path: ":orgSlug/settings",
-                  lazy: () => import("./app/organization/$orgSlug/settings/route"),
+                  lazy: () => import("./app/organization/settings/route"),
                 },
                 {
                   id: "app.organization.invite",
                   path: ":orgSlug/invite",
-                  lazy: () => import("./app/organization/$orgSlug/invite/route"),
+                  lazy: () => import("./app/organization/invite/route"),
                 },
               ],
             },
