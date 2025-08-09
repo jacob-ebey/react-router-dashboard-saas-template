@@ -1,8 +1,11 @@
 import { PreserveRedirectLink } from "@/components/preserve-redirect-link";
+import { cacheRoute } from "@/lib/cache";
 
 import { LoginForm } from "./client";
 
 export default function Login() {
+  cacheRoute();
+
   return (
     <>
       <title>Login | The App</title>

@@ -17,9 +17,8 @@ declare global {
   var SESSION: AsyncLocalStorage<SessionContext>;
 }
 
-const SESSION =
-  globalThis.SESSION ??
-  (globalThis.SESSION = new AsyncLocalStorage<SessionContext>());
+const SESSION = (globalThis.SESSION ??=
+  new AsyncLocalStorage<SessionContext>());
 
 const POISON_AFTER_RESPONSE_GENERATED = new Set(["flash", "set", "unset"]);
 

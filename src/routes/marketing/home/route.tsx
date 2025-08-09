@@ -1,20 +1,12 @@
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
+import { cacheRoute } from "@/lib/cache";
 
 import { openSignupModal } from "../client-on";
-import { data, type HeadersFunction } from "react-router";
-
-export const loader = () =>
-  data(null, {
-    headers: {
-      "Vercel-CDN-Cache-Control":
-        "public, s-maxage=30, stale-while-revalidate=59",
-    },
-  });
-
-export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export default function Home() {
+  cacheRoute();
+
   return (
     <>
       <title>Home | The App</title>
