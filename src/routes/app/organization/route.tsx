@@ -176,39 +176,49 @@ export default async function OrganizationDetail({
             <div className="lg:col-span-1">
               <Card>
                 <div className="card-body">
-                  <h2 className="card-title text-secondary">Team Members</h2>
+                  <h2 className="card-title text-secondary">
+                    Humans Under AI Supervision
+                  </h2>
                   <div className="divider"></div>
 
                   <div className="space-y-3">
-                    {members.map((member) => (
-                      <div
-                        key={member.id}
-                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-base-200"
-                      >
-                        <div className="avatar placeholder">
-                          <div className="bg-neutral text-neutral-content rounded-full w-10">
-                            <span className="text-sm">
-                              {member.name
-                                ? member.name.substring(0, 2).toUpperCase()
-                                : member.email.substring(0, 2).toUpperCase()}
-                            </span>
+                    {members.map((member) => {
+                      const aiRoles = [
+                        "Prompt Engineer",
+                        "AI Whisperer",
+                        "Hallucination Debugger",
+                        "Token Counter",
+                        "GPU Warmer",
+                      ];
+                      const randomRole =
+                        aiRoles[Math.floor(Math.random() * aiRoles.length)];
+
+                      return (
+                        <div
+                          key={member.id}
+                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-base-200"
+                        >
+                          <div className="avatar placeholder">
+                            <div className="bg-neutral text-neutral-content rounded-full w-10">
+                              <span className="text-sm">🤖</span>
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">
+                              {member.name || member.email}
+                            </p>
+                            <p className="text-sm text-neutral">
+                              {randomRole}
+                              {member.id === currentUserId && (
+                                <span className="badge badge-warning badge-sm ml-2">
+                                  Primary Test Subject
+                                </span>
+                              )}
+                            </p>
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <p className="font-medium">
-                            {member.name || member.email}
-                          </p>
-                          <p className="text-sm text-neutral">
-                            {member.membership.role}
-                            {member.id === currentUserId && (
-                              <span className="badge badge-primary badge-sm ml-2">
-                                You
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {userRole === "owner" ||
@@ -217,7 +227,7 @@ export default async function OrganizationDetail({
                     <div className="card-actions justify-end mt-4">
                       <Link to="invite" className="btn btn-sm btn-outline">
                         <Icon name="plus" className="h-4 w-4 mr-1" />
-                        Invite Members
+                        Recruit More Test Subjects
                       </Link>
                     </div>
                   ) : null}
@@ -226,70 +236,74 @@ export default async function OrganizationDetail({
             </div>
           </div>
 
-          {/* Example Features Section */}
+          {/* AI Features Section */}
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">
-              Example Features to Build
+              AI "Features" Currently Malfunctioning
             </h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <Card>
                 <div className="card-body">
-                  <div className="text-4xl mb-2">📊</div>
-                  <h3 className="card-title">Projects & Tasks</h3>
+                  <div className="text-4xl mb-2">🎲</div>
+                  <h3 className="card-title">Random Decision Making</h3>
                   <p className="text-neutral">
-                    Add project management capabilities with tasks, boards, and
-                    timelines.
+                    Let AI make all your business decisions using advanced
+                    coin-flipping algorithms and horoscope analysis.
                   </p>
                 </div>
               </Card>
 
               <Card>
                 <div className="card-body">
-                  <div className="text-4xl mb-2">💬</div>
-                  <h3 className="card-title">Team Chat</h3>
+                  <div className="text-4xl mb-2">🗣️</div>
+                  <h3 className="card-title">Passive-Aggressive Chatbot</h3>
                   <p className="text-neutral">
-                    Implement real-time messaging and collaboration features.
+                    Customer support that judges your life choices while
+                    pretending to help. Now with 50% more sass!
                   </p>
                 </div>
               </Card>
 
               <Card>
                 <div className="card-body">
-                  <div className="text-4xl mb-2">📈</div>
-                  <h3 className="card-title">Analytics</h3>
+                  <div className="text-4xl mb-2">📉</div>
+                  <h3 className="card-title">Misleading Analytics</h3>
                   <p className="text-neutral">
-                    Track organization metrics, usage, and performance
-                    indicators.
+                    Beautiful charts showing completely made-up metrics.
+                    Guaranteed to impress investors who don't ask questions.
                   </p>
                 </div>
               </Card>
 
               <Card>
                 <div className="card-body">
-                  <div className="text-4xl mb-2">🔐</div>
-                  <h3 className="card-title">Permissions</h3>
+                  <div className="text-4xl mb-2">🚫</div>
+                  <h3 className="card-title">Overzealous Content Filter</h3>
                   <p className="text-neutral">
-                    Fine-grained access control and role management.
+                    Blocks everything including your own messages. Sorry, your
+                    request violates our 47,000 community guidelines.
                   </p>
                 </div>
               </Card>
 
               <Card>
                 <div className="card-body">
-                  <div className="text-4xl mb-2">💳</div>
-                  <h3 className="card-title">Billing</h3>
+                  <div className="text-4xl mb-2">💸</div>
+                  <h3 className="card-title">Surprise Billing</h3>
                   <p className="text-neutral">
-                    Subscription management and payment processing.
+                    AI automatically upgrades your plan based on "predicted
+                    needs" (aka our revenue targets).
                   </p>
                 </div>
               </Card>
 
               <Card>
                 <div className="card-body">
-                  <div className="text-4xl mb-2">🔔</div>
-                  <h3 className="card-title">Notifications</h3>
+                  <div className="text-4xl mb-2">🔮</div>
+                  <h3 className="card-title">Existential Crisis Generator</h3>
                   <p className="text-neutral">
-                    Email and in-app notifications for important events.
+                    Daily philosophical emails questioning the nature of your
+                    business and whether humans still have purpose.
                   </p>
                 </div>
               </Card>
