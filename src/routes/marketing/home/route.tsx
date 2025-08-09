@@ -6,7 +6,10 @@ import { data, type HeadersFunction } from "react-router";
 
 export const loader = () =>
   data(null, {
-    headers: { "Cache-Control": "s-maxage=30, stale-while-revalidate=59" },
+    headers: {
+      "CDN-Cache-Control": "public, s-maxage=60",
+      "Vercel-CDN-Cache-Control": "public, s-maxage=60",
+    },
   });
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
