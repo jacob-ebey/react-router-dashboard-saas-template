@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
-  themes: silk --default, dim --prefersdark;
+  themes: silk --default;
 }
 
 @layer base {
