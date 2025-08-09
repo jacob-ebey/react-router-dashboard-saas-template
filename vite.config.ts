@@ -32,7 +32,10 @@ const prerender = [
     expiration: 30,
     source: "/",
   },
-];
+].map((c) => ({
+  ...c,
+  id: c.id.replace(/\./g, "-"),
+}));
 
 export default defineConfig(({ command }) => ({
   environments: {
@@ -137,17 +140,17 @@ export default defineConfig(({ command }) => ({
               ...prerender.flatMap((route) => [
                 {
                   source: route.source,
-                  destination: `/prerender.${route.id}`,
+                  destination: `/prerender-${route.id}`,
                 },
                 route.source === "/"
                   ? {
                       source: `/_root.rsc`,
-                      destination: `/prerender.${route.id}`,
+                      destination: `/prerender-${route.id}`,
                       expiration: route.expiration,
                     }
                   : {
                       source: `${route.source}.rsc`,
-                      destination: `/prerender.${route.id}`,
+                      destination: `/prerender-${route.id}`,
                     },
               ]),
               {
@@ -213,14 +216,14 @@ export default defineConfig(({ command }) => ({
           const functions = ["rsc"];
 
           for (const { expiration, id } of prerender) {
-            functions.push(id);
+            functions.push(`prerender-${id}`);
             fs.cpSync(
               ".vercel/output/functions/rsc.func",
-              `.vercel/output/functions/${id}.func`,
+              `.vercel/output/functions/prerender-${id}.func`,
               { recursive: true }
             );
             fs.writeFileSync(
-              `.vercel/output/functions/${id}.prerender-config.json`,
+              `.vercel/output/functions/prerender-${id}.prerender-config.json`,
               JSON.stringify({
                 expiration,
               })
