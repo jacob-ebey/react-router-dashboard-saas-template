@@ -139,7 +139,7 @@ export default defineConfig(({ command }) => ({
             rewrites: [
               ...prerender.flatMap((route) => [
                 {
-                  source: route.source,
+                  source: route.source === "/" ? `^\\/$` : route.source,
                   destination: `/prerender-${route.id}`,
                 },
                 route.source === "/"
