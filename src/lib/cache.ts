@@ -78,7 +78,7 @@ export function provideCache(request: Request, cb: () => Promise<Response>) {
       !ctx.duration ||
       ctx.duration === "never" ||
       response.status < 200 ||
-      response.status >= 400
+      response.status >= 300
     )
       return response;
 
