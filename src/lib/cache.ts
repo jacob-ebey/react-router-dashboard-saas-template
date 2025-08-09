@@ -76,13 +76,16 @@ export function provideCache(request: Request, cb: () => Promise<Response>) {
     if (
       !(request.method === "GET" || request.method === "HEAD") ||
       !ctx.duration ||
-      ctx.duration === "never"
+      ctx.duration === "never" ||
+      response.status < 200 ||
+      response.status >= 400
     )
       return response;
 
     const headers = new Headers(response.headers);
 
     const [stale, revalidate, expires] = getCacheLength(ctx.duration);
+    headers.append("Vary", "Cookie");
     if (stale > 0) {
       headers.append("Cache-Control", `public, s-maxage=${stale}`);
     }
