@@ -26,17 +26,6 @@ declare global {
   var DID_CLEAN_UP: boolean | undefined;
 }
 
-const prerender = [
-  {
-    id: "prerender-marketing",
-    expiration: 30,
-    sources: ["/", "/login"],
-  },
-].map((c) => ({
-  ...c,
-  id: c.id.replace(/\./g, "-"),
-}));
-
 export default defineConfig(({ command }) => ({
   environments: {
     client: {
@@ -200,48 +189,7 @@ export default defineConfig(({ command }) => ({
 
           const functions = ["rsc"];
 
-          for (const { expiration, id, sources } of prerender) {
-            for (const source of sources) {
-              if (source === "/") {
-                fs.writeFileSync(
-                  ".vercel/output/functions/index.func",
-                  "rsc.func"
-                );
-                fs.writeFileSync(
-                  ".vercel/output/functions/index.prerender-config.json",
-                  JSON.stringify(
-                    {
-                      expiration,
-                    },
-                    null,
-                    2
-                  )
-                );
-              } else {
-                const relative = source.startsWith("/")
-                  ? source.slice(1)
-                  : source;
-
-                fs.writeFileSync(
-                  `.vercel/output/functions/${relative}.func`,
-                  "rsc.func"
-                );
-                fs.writeFileSync(
-                  `.vercel/output/functions/${relative}.prerender-config.json`,
-                  JSON.stringify(
-                    {
-                      expiration,
-                    },
-                    null,
-                    2
-                  )
-                );
-              }
-            }
-          }
-
           for (const id of functions) {
-            // Run pnpm install --prod --prefer-offline inside the rsc.func directory
             await $({
               cwd: path.resolve(`.vercel/output/functions/${id}.func`),
               stderr: "inherit",
