@@ -58,14 +58,6 @@ Create a production build:
 npm run build
 ```
 
-## Running Production Build
-
-Run the production server:
-
-```bash
-npm start
-```
-
 ## Understanding React Server Components
 
 This template includes three entry points:
