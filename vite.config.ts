@@ -136,23 +136,24 @@ export default defineConfig(({ command }) => ({
                 ],
               },
             ],
-            rewrites: [
+            routes: [
               ...prerender.flatMap((route) => [
                 {
-                  source: route.source === "/" ? `^\\/$` : route.source,
-                  destination: `/prerender-${route.id}`,
+                  src: route.source,
+                  dest: `/prerender-${route.id}`,
                 },
                 route.source === "/"
                   ? {
-                      source: `/_root.rsc`,
-                      destination: `/prerender-${route.id}`,
-                      expiration: route.expiration,
+                      src: `/_root\\.rsc`,
+                      dest: `/prerender-${route.id}`,
                     }
                   : {
-                      source: `${route.source}.rsc`,
-                      destination: `/prerender-${route.id}`,
+                      src: `${route.source}\\.rsc`,
+                      dest: `/prerender-${route.id}`,
                     },
               ]),
+            ],
+            rewrites: [
               {
                 source: "/(.*)",
                 destination: "/rsc",
