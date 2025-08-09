@@ -1,7 +1,17 @@
+import { unstable_getRSCStream as getRSCStream } from "react-router";
+
 // Generate a unique cache ID for this session/tab
 const CACHE_ID = `cachedFetch_${crypto.randomUUID()}`;
 
 let cacheInstance: Cache | null = null;
+
+getCache().then((cache) => {
+  const body = getRSCStream();
+  const url = new URL(window.location.href);
+  url.pathname = url.pathname === "/" ? "_root.rsc" : `${url.pathname}.rsc`;
+
+  cache.put(new Request(url), new Response(body));
+});
 
 async function getCache(): Promise<Cache> {
   if (!cacheInstance) {
