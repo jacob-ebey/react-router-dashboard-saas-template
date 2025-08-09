@@ -1,4 +1,4 @@
-import { data, Link } from "react-router";
+import { data, Link, type HeadersFunction } from "react-router";
 
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,8 @@ export const loader = () =>
   data(null, {
     headers: { "Cache-Control": "s-maxage=1, stale-while-revalidate=59" },
   });
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export default async function AppHome() {
   const userSession = requireUser();
