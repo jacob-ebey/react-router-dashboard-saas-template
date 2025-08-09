@@ -15,15 +15,6 @@ declare global {
   var signup_modal: HTMLDialogElement;
 }
 
-export function loader({ request }: LoaderFunctionArgs) {
-  const user = getUser();
-  const url = new URL(request.url);
-
-  if (user && url.pathname === "/") {
-    throw redirect("/app");
-  }
-}
-
 export default Outlet;
 
 export function Layout() {

@@ -1,8 +1,11 @@
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
+import { redirectIfLoggedInMiddleware } from "@/lib/auth";
 import { cacheRoute } from "@/lib/cache";
 
 import { openSignupModal } from "../client-on";
+
+export const unstable_middleware = [redirectIfLoggedInMiddleware];
 
 export default function Home() {
   cacheRoute();
