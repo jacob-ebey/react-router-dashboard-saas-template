@@ -84,7 +84,7 @@ export function provideCache(request: Request, cb: () => Promise<Response>) {
 
     const [stale, revalidate, expires] = getCacheLength(ctx.duration);
     if (import.meta.env.PROD && stale > 0) {
-      headers.append("Cache-Control", `public, max-age=${stale}`);
+      headers.append("Cache-Control", `public, max-age=${stale}, no-cache`);
     }
     if (revalidate > 0 || expires > 0) {
       headers.append(
