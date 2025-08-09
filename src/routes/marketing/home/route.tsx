@@ -2,6 +2,14 @@ import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
 
 import { openSignupModal } from "../client-on";
+import { data, type HeadersFunction } from "react-router";
+
+export const loader = () =>
+  data(null, {
+    headers: { "Cache-Control": "s-maxage=1, stale-while-revalidate=59" },
+  });
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export default function Home() {
   return (
