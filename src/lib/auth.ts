@@ -1,7 +1,22 @@
 import { redirect, type unstable_MiddlewareFunction } from "react-router";
 
 import { getSession } from "@/lib/session";
-import { assert } from "@/lib/utils";
+import { assert, validateRedirect } from "@/lib/utils";
+
+export const redirectIfLoggedInMiddleware: unstable_MiddlewareFunction = (
+  { request },
+  next
+) => {
+  if (getUser()) {
+    const url = new URL(request.url);
+
+    return redirect(
+      validateRedirect(url.searchParams.get("redirectTo"), "/app")
+    );
+  }
+
+  return next();
+};
 
 export const requireUserMiddleware: unstable_MiddlewareFunction = (
   { request },

@@ -5,13 +5,28 @@ const CACHE_ID = `cachedFetch_${crypto.randomUUID()}`;
 
 let cacheInstance: Cache | null = null;
 
-getCache().then((cache) => {
-  const body = getRSCStream();
-  const url = new URL(window.location.href);
-  url.pathname = url.pathname === "/" ? "_root.rsc" : `${url.pathname}.rsc`;
+declare global {
+  interface Window {
+    _cachedInitialPage?: boolean;
+  }
+}
 
-  cache.put(new Request(url), new Response(body));
-});
+const initialURL = new URL(window.location.href);
+initialURL.pathname =
+  initialURL.pathname === "/" ? "_root.rsc" : `${initialURL.pathname}.rsc`;
+if (!window._cachedInitialPage) {
+  window._cachedInitialPage = true;
+
+  getCache()
+    .then((cache) => {
+      const body = getRSCStream();
+
+      return cache.put(new Request(initialURL), new Response(body));
+    })
+    .catch((error) => {
+      console.error("Failed to cache initial page:", error);
+    });
+}
 
 async function getCache(): Promise<Cache> {
   if (!cacheInstance) {

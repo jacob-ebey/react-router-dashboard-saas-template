@@ -1,7 +1,10 @@
 import { PreserveRedirectLink } from "@/components/preserve-redirect-link";
+import { redirectIfLoggedInMiddleware } from "@/lib/auth";
 import { cacheRoute } from "@/lib/cache";
 
 import { LoginForm } from "./client";
+
+export const unstable_middleware = [redirectIfLoggedInMiddleware];
 
 export default function Login() {
   cacheRoute();
