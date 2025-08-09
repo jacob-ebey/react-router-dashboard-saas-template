@@ -2,9 +2,8 @@ import { Link } from "react-router";
 
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
-import { getDb } from "@/db";
-import { getOrganizationsForUser } from "@/db/queries/organization";
-import { getUserById } from "@/db/queries/user";
+import { getOrganizationsForUser } from "@/data/organization";
+import { getUserById } from "@/data/user";
 import { requireUser } from "@/lib/auth";
 
 import { CreateOrganizationForm } from "./client";
@@ -13,14 +12,13 @@ export default async function AppHome() {
   const userSession = requireUser();
 
   // Get the full user details
-  const db = getDb();
-  const user = await getUserById(db, userSession.id);
+  const user = await getUserById(userSession.id);
   if (!user) {
     throw new Error("User not found");
   }
 
   // Get user's organizations
-  const organizations = await getOrganizationsForUser(db, user.id);
+  const organizations = await getOrganizationsForUser(user.id);
 
   return (
     <>

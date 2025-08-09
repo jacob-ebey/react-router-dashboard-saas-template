@@ -22,7 +22,7 @@ export function ProfileForms({ user }: { user: User }) {
     <div className="grid gap-8">
       <UserInfoSection user={user} />
       <UpdateNameForm currentName={user.name} />
-      <ChangePasswordForm email={user.email} />
+      <ChangePasswordForm />
       <DeleteAccountForm userEmail={user.email} />
     </div>
   );
@@ -118,7 +118,7 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
   );
 }
 
-function ChangePasswordForm({ email }: { email: string }) {
+function ChangePasswordForm() {
   const [lastResult, action, pending] = useActionState(
     changePassword,
     undefined

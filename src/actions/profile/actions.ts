@@ -12,7 +12,7 @@ import {
   updateUserPassword,
   verifyUserPassword,
 } from "@/db/mutations/user";
-import { getUserById } from "@/db/queries/user";
+import { queryUserById } from "@/db/queries/user";
 import { requireUser } from "@/lib/auth";
 import { destroySession } from "@/lib/session";
 
@@ -102,7 +102,7 @@ export async function deleteAccount(
   const { email } = submission.value;
 
   const db = getDb();
-  const user = await getUserById(db, id);
+  const user = await queryUserById(db, id);
 
   if (!user) {
     return submission.reply({

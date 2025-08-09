@@ -1,4 +1,4 @@
-import { Link, Outlet, redirect, type LoaderFunctionArgs } from "react-router";
+import { Link, Outlet } from "react-router";
 
 import { GloablLoader } from "@/components/global-loader";
 import { LogoutForm } from "@/components/logout-form";

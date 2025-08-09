@@ -2,12 +2,11 @@ import { Link } from "react-router";
 
 import { AccessDenied } from "@/components/access-denied";
 import { Icon } from "@/components/icon";
-import { getDb } from "@/db";
-import { getOrganizationInvitations } from "@/db/queries/invitation";
+import { getOrganizationInvitations } from "@/data/invitation";
 import {
   getOrganizationBySlugSecure,
   getUserOrgRole,
-} from "@/db/queries/organization";
+} from "@/data/organization";
 import { requireUser } from "@/lib/auth";
 
 import { OrganizationSettingsForms } from "./client";
@@ -18,24 +17,25 @@ export default async function OrganizationSettings({
   params: { orgSlug: string };
 }) {
   const user = requireUser();
-  const db = getDb();
 
-  const organization = await getOrganizationBySlugSecure(
-    db,
-    params.orgSlug,
-    user.id
-  );
+  const organization = await getOrganizationBySlugSecure({
+    slug: params.orgSlug,
+    userId: user.id,
+  });
   if (!organization) {
     return <AccessDenied />;
   }
 
   // Check if user has permission to view settings
-  const userRole = await getUserOrgRole(db, user.id, organization.id);
+  const userRole = await getUserOrgRole({
+    userId: user.id,
+    orgId: organization.id,
+  });
 
   // Fetch invitations if user can manage them
   const invitations =
     userRole === "owner" || userRole === "admin"
-      ? await getOrganizationInvitations(db, organization.id)
+      ? await getOrganizationInvitations(organization.id)
       : [];
 
   return (

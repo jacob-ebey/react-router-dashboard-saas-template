@@ -3,12 +3,11 @@ import { Link } from "react-router";
 import { AccessDenied } from "@/components/access-denied";
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
-import { getDb } from "@/db";
 import {
   getOrganizationBySlugSecure,
   getUserOrgRole,
   getUsersByOrganization,
-} from "@/db/queries/organization";
+} from "@/data/organization";
 import { requireUser } from "@/lib/auth";
 
 export default async function OrganizationDetail({
@@ -17,22 +16,23 @@ export default async function OrganizationDetail({
   params: { orgSlug: string };
 }) {
   const user = requireUser();
-  const db = getDb();
 
-  const organization = await getOrganizationBySlugSecure(
-    db,
-    params.orgSlug,
-    user.id
-  );
+  const organization = await getOrganizationBySlugSecure({
+    slug: params.orgSlug,
+    userId: user.id,
+  });
 
   if (!organization) {
     return <AccessDenied />;
   }
 
-  const userRole = await getUserOrgRole(db, user.id, organization.id);
+  const userRole = await getUserOrgRole({
+    userId: user.id,
+    orgId: organization.id,
+  });
 
   // Get members of the organization
-  const members = await getUsersByOrganization(db, organization.id);
+  const members = await getUsersByOrganization(organization.id);
   const currentUserId = user.id;
 
   return (

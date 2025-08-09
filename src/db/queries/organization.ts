@@ -3,7 +3,7 @@ import type { Database } from "../index";
 import { organizations, organizationMembers, users } from "../schema";
 import type { Organization, User, OrganizationMember } from "../schema";
 
-export async function getOrganizationById(
+export async function queryOrganizationById(
   db: Database,
   id: string
 ): Promise<Organization | undefined> {
@@ -14,7 +14,7 @@ export async function getOrganizationById(
   return organization;
 }
 
-export async function getOrganizationBySlug(
+export async function queryOrganizationBySlug(
   db: Database,
   slug: string
 ): Promise<Organization | undefined> {
@@ -26,7 +26,7 @@ export async function getOrganizationBySlug(
 }
 
 // Secure versions that check user membership
-export async function getOrganizationByIdSecure(
+export async function queryOrganizationByIdSecure(
   db: Database,
   id: string,
   userId: string
@@ -52,7 +52,7 @@ export async function getOrganizationByIdSecure(
   return organization;
 }
 
-export async function getOrganizationBySlugSecure(
+export async function queryOrganizationBySlugSecure(
   db: Database,
   slug: string,
   userId: string
@@ -82,7 +82,7 @@ export async function getOrganizationBySlugSecure(
   return organization;
 }
 
-export async function getOrganizationsForUser(
+export async function queryOrganizationsForUser(
   db: Database,
   userId: string
 ): Promise<(Organization & { membership: OrganizationMember })[]> {
@@ -92,7 +92,10 @@ export async function getOrganizationsForUser(
       membership: organizationMembers,
     })
     .from(organizations)
-    .innerJoin(organizationMembers, eq(organizationMembers.organizationId, organizations.id))
+    .innerJoin(
+      organizationMembers,
+      eq(organizationMembers.organizationId, organizations.id)
+    )
     .where(
       and(
         eq(organizationMembers.userId, userId),
@@ -101,13 +104,13 @@ export async function getOrganizationsForUser(
     )
     .orderBy(organizationMembers.joinedAt);
 
-  return userOrgs.map(row => ({
+  return userOrgs.map((row) => ({
     ...row.organization,
     membership: row.membership,
   }));
 }
 
-export async function getUsersByOrganization(
+export async function queryUsersByOrganization(
   db: Database,
   organizationId: string
 ): Promise<(User & { membership: OrganizationMember })[]> {
@@ -126,13 +129,13 @@ export async function getUsersByOrganization(
     )
     .orderBy(users.name);
 
-  return orgUsers.map(row => ({
+  return orgUsers.map((row) => ({
     ...row.user,
     membership: row.membership,
   }));
 }
 
-export async function isUserOrgMember(
+export async function queryIsUserOrgMember(
   db: Database,
   userId: string,
   organizationId: string
@@ -148,7 +151,7 @@ export async function isUserOrgMember(
   return !!membership;
 }
 
-export async function getUserOrgRole(
+export async function queryUserOrgRole(
   db: Database,
   userId: string,
   organizationId: string
@@ -161,7 +164,7 @@ export async function getUserOrgRole(
     ),
     columns: {
       role: true,
-    }
+    },
   });
 
   return membership?.role || null;

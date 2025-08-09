@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "react-router";
 import type { SubmissionResult } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { eq } from "drizzle-orm";
@@ -8,10 +7,13 @@ import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { requireUser } from "@/lib/auth";
 import { organizationInvitations } from "@/db/schema";
-import { getUserOrgRole, getOrganizationById } from "@/db/queries/organization";
 import {
-  getPendingInvitationByEmailAndOrg,
-  getInvitationById,
+  queryUserOrgRole,
+  queryOrganizationById,
+} from "@/db/queries/organization";
+import {
+  queryPendingInvitationByEmailAndOrg,
+  queryInvitationById,
 } from "@/db/queries/invitation";
 import {
   createInvitation,
@@ -22,7 +24,7 @@ import {
   addUserToOrganization,
   removeUserFromOrganization,
 } from "@/db/mutations/organization";
-import { getUserByEmail, getUserById } from "@/db/queries/user";
+import { queryUserByEmail, queryUserById } from "@/db/queries/user";
 
 import {
   InviteUserFormSchema,
@@ -49,7 +51,7 @@ export async function inviteUser(
 
   try {
     // Check if user has permission to invite
-    const userRole = await getUserOrgRole(db, user.id, organizationId);
+    const userRole = await queryUserOrgRole(db, user.id, organizationId);
     if (
       userRole !== "owner" &&
       userRole !== "admin" &&
@@ -63,7 +65,7 @@ export async function inviteUser(
     }
 
     // Check if invitation already exists
-    const existingInvitation = await getPendingInvitationByEmailAndOrg(
+    const existingInvitation = await queryPendingInvitationByEmailAndOrg(
       db,
       email,
       organizationId
@@ -77,9 +79,9 @@ export async function inviteUser(
     }
 
     // Check if user is already a member
-    const existingUser = await getUserByEmail(db, email);
+    const existingUser = await queryUserByEmail(db, email);
     if (existingUser) {
-      const existingRole = await getUserOrgRole(
+      const existingRole = await queryUserOrgRole(
         db,
         existingUser.id,
         organizationId
@@ -136,7 +138,7 @@ export async function acceptInvitation(
 
   try {
     // Get user details
-    const user = await getUserById(db, userId.id);
+    const user = await queryUserById(db, userId.id);
     if (!user) {
       return submission.reply({
         formErrors: ["User not found"],
@@ -144,7 +146,7 @@ export async function acceptInvitation(
     }
 
     // Get invitation details
-    const invitation = await getInvitationById(db, invitationId);
+    const invitation = await queryInvitationById(db, invitationId);
     if (!invitation) {
       return submission.reply({
         formErrors: ["Invitation not found"],
@@ -183,7 +185,7 @@ export async function acceptInvitation(
     });
 
     // Get organization for redirect
-    const organization = await getOrganizationById(
+    const organization = await queryOrganizationById(
       db,
       invitation.organizationId
     );
@@ -224,7 +226,7 @@ export async function deleteInvitationAndRemoveUser(
 
   try {
     // Get invitation details
-    const invitation = await getInvitationById(db, invitationId);
+    const invitation = await queryInvitationById(db, invitationId);
     if (!invitation) {
       return submission.reply({
         formErrors: ["Invitation not found"],
@@ -232,7 +234,7 @@ export async function deleteInvitationAndRemoveUser(
     }
 
     // Check if user has permission to delete
-    const userRole = await getUserOrgRole(
+    const userRole = await queryUserOrgRole(
       db,
       user.id,
       invitation.organizationId
@@ -249,7 +251,7 @@ export async function deleteInvitationAndRemoveUser(
 
     // If invitation was accepted, remove the user from the organization
     if (invitation.status === "accepted") {
-      const invitedUser = await getUserByEmail(db, invitation.email);
+      const invitedUser = await queryUserByEmail(db, invitation.email);
       if (invitedUser) {
         await removeUserFromOrganization(
           db,
@@ -288,7 +290,7 @@ export async function declineInvitation(
 
   try {
     // Get user details
-    const user = await getUserById(db, userId.id);
+    const user = await queryUserById(db, userId.id);
     if (!user) {
       return submission.reply({
         formErrors: ["User not found"],
@@ -296,7 +298,7 @@ export async function declineInvitation(
     }
 
     // Get the invitation
-    const invitation = await getInvitationById(
+    const invitation = await queryInvitationById(
       db,
       submission.value.invitationId
     );

@@ -1,13 +1,11 @@
-import { getDb } from "@/db";
-import { getUserById } from "@/db/queries/user";
+import { getUserById } from "@/data/user";
 import { requireUser } from "@/lib/auth";
 
 import { ProfileForms } from "./client";
 
 export default async function ProfilePage() {
   const { id } = requireUser();
-  const db = getDb();
-  const user = await getUserById(db, id);
+  const user = await getUserById(id);
 
   if (!user) {
     throw new Error("User not found");

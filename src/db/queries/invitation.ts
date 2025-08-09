@@ -1,8 +1,13 @@
 import { eq, and, gt } from "drizzle-orm";
 import type { Database } from "@/db";
-import { organizationInvitations, organizations, users, type OrganizationInvitation } from "@/db/schema";
+import {
+  organizationInvitations,
+  organizations,
+  users,
+  type OrganizationInvitation,
+} from "@/db/schema";
 
-export async function getInvitationById(
+export async function queryInvitationById(
   db: Database,
   invitationId: string
 ): Promise<OrganizationInvitation | undefined> {
@@ -11,7 +16,7 @@ export async function getInvitationById(
   });
 }
 
-export async function getInvitationByIdWithDetails(
+export async function queryInvitationByIdWithDetails(
   db: Database,
   invitationId: string
 ) {
@@ -26,17 +31,14 @@ export async function getInvitationByIdWithDetails(
       organizations,
       eq(organizationInvitations.organizationId, organizations.id)
     )
-    .innerJoin(
-      users,
-      eq(organizationInvitations.invitedByUserId, users.id)
-    )
+    .innerJoin(users, eq(organizationInvitations.invitedByUserId, users.id))
     .where(eq(organizationInvitations.id, invitationId))
     .limit(1);
 
   return result[0];
 }
 
-export async function getPendingInvitationByEmailAndOrg(
+export async function queryPendingInvitationByEmailAndOrg(
   db: Database,
   email: string,
   organizationId: string
@@ -50,7 +52,7 @@ export async function getPendingInvitationByEmailAndOrg(
   });
 }
 
-export async function getOrganizationInvitations(
+export async function queryOrganizationInvitations(
   db: Database,
   organizationId: string
 ) {
@@ -65,20 +67,14 @@ export async function getOrganizationInvitations(
       },
     })
     .from(organizationInvitations)
-    .innerJoin(
-      users,
-      eq(organizationInvitations.invitedByUserId, users.id)
-    )
+    .innerJoin(users, eq(organizationInvitations.invitedByUserId, users.id))
     .where(eq(organizationInvitations.organizationId, organizationId))
     .orderBy(organizationInvitations.createdAt);
 
   return invitations;
 }
 
-export async function getUserPendingInvitations(
-  db: Database,
-  email: string
-) {
+export async function queryUserPendingInvitations(db: Database, email: string) {
   const invitations = await db
     .select({
       invitation: organizationInvitations,
@@ -95,10 +91,7 @@ export async function getUserPendingInvitations(
       organizations,
       eq(organizationInvitations.organizationId, organizations.id)
     )
-    .innerJoin(
-      users,
-      eq(organizationInvitations.invitedByUserId, users.id)
-    )
+    .innerJoin(users, eq(organizationInvitations.invitedByUserId, users.id))
     .where(
       and(
         eq(organizationInvitations.email, email),

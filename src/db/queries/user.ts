@@ -4,7 +4,7 @@ import { desc, eq } from "drizzle-orm";
 import type { Database } from "../index";
 import { passwords, users, type User } from "../schema";
 
-export async function getUserById(
+export async function queryUserById(
   db: Database,
   id: string
 ): Promise<User | undefined> {
@@ -15,7 +15,7 @@ export async function getUserById(
   return user;
 }
 
-export async function getUserByEmail(
+export async function queryUserByEmail(
   db: Database,
   email: string
 ): Promise<User | undefined> {
@@ -26,7 +26,7 @@ export async function getUserByEmail(
   return user;
 }
 
-export async function getUserByEmailAndPassword(
+export async function queryUserByEmailAndPassword(
   db: Database,
   email: string,
   password: string

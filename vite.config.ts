@@ -56,9 +56,12 @@ export default defineConfig(({ command }) => ({
         include: [
           "@conform-to/react",
           "@conform-to/zod/v4",
+          "clsx",
           "react",
           "react-router",
           "react-router/internal/react-server-client",
+          "tailwind-merge",
+          "zod/v4",
         ],
       },
     },

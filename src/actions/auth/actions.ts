@@ -10,7 +10,7 @@ import {
 } from "@/constants";
 import { getDb } from "@/db";
 import { createUser } from "@/db/mutations/user";
-import { getUserByEmailAndPassword } from "@/db/queries/user";
+import { queryUserByEmailAndPassword } from "@/db/queries/user";
 import { destroySession, getSession } from "@/lib/session";
 import { validateRedirect } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export async function login(
 
   const db = getDb();
 
-  const user = await getUserByEmailAndPassword(db, email, password);
+  const user = await queryUserByEmailAndPassword(db, email, password);
 
   if (!user) {
     return submission.reply({

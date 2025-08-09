@@ -6,8 +6,6 @@ import {
   unstable_RSCStaticRouter as RSCStaticRouter,
 } from "react-router";
 
-import { Icons } from "./components/icon";
-
 export async function generateHTML(
   request: Request,
   fetchServer: (request: Request) => Promise<Response>

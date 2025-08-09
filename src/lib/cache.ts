@@ -1,6 +1,10 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 
+import DataLoader, { type BatchLoadFn } from "dataloader";
+import type { JsonValue } from "type-fest";
+
 type CacheContext = {
+  dataloaders: WeakMap<Function, DataLoader<any, any, any>>;
   duration?: CacheLength;
 };
 
@@ -42,12 +46,39 @@ const cacheLengths = {
   [stale: number, revalidate: number, expires: number]
 >;
 
-export function getCacheLength(length: CacheLength) {
-  if (!cacheLengths[length]) {
-    throw new Error(`Invalid cache length: ${length}`);
-  }
+export function batch<Key extends JsonValue | undefined, Result>(
+  loader: BatchLoadFn<Key, Result>
+): (key: Key) => Promise<Result> {
+  return async (key) => {
+    const ctx = CACHE.getStore();
+    let dataloader: DataLoader<any, any, any> | undefined;
+    const options = {
+      cacheKeyFn: (key: Key) =>
+        key === null || typeof key === "undefined"
+          ? String(key)
+          : typeof key === "object"
+          ? JSON.stringify(
+              Object.fromEntries(
+                Object.entries(key).sort(([keyA], [keyB]) =>
+                  keyA.localeCompare(keyB)
+                )
+              )
+            )
+          : JSON.stringify(key),
+    };
+    if (!ctx) {
+      console.warn("Cache not provided, did you forget to call provideCache?");
+    } else {
+      dataloader = ctx.dataloaders.get(loader);
+    }
 
-  return cacheLengths[length];
+    if (!dataloader) {
+      dataloader = new DataLoader(loader, options);
+      ctx?.dataloaders.set(loader, dataloader);
+    }
+
+    return dataloader.load(key);
+  };
 }
 
 export function cacheRoute(duration: CacheLength = "default") {
@@ -69,7 +100,9 @@ export function cacheRoute(duration: CacheLength = "default") {
 }
 
 export function provideCache(request: Request, cb: () => Promise<Response>) {
-  const ctx: CacheContext = {};
+  const ctx: CacheContext = {
+    dataloaders: new WeakMap(),
+  };
   return CACHE.run(ctx, async () => {
     const response = await cb();
 
@@ -109,4 +142,12 @@ export function provideCache(request: Request, cb: () => Promise<Response>) {
 
     return response;
   });
+}
+
+function getCacheLength(length: CacheLength) {
+  if (!cacheLengths[length]) {
+    throw new Error(`Invalid cache length: ${length}`);
+  }
+
+  return cacheLengths[length];
 }

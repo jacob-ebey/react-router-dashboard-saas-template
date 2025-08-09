@@ -13,8 +13,8 @@ import {
   updateOrganization,
 } from "@/db/mutations/organization";
 import {
-  getOrganizationBySlug,
-  getUserOrgRole,
+  queryOrganizationBySlug,
+  queryUserOrgRole,
 } from "@/db/queries/organization";
 import { requireUser } from "@/lib/auth";
 import {
@@ -43,7 +43,10 @@ export async function createOrganizationAction(
 
   try {
     // Check if slug is already taken
-    const existingOrg = await getOrganizationBySlug(db, submission.value.slug);
+    const existingOrg = await queryOrganizationBySlug(
+      db,
+      submission.value.slug
+    );
     if (existingOrg) {
       return submission.reply({
         fieldErrors: {
@@ -101,7 +104,7 @@ export async function updateOrganizationAction(
 
   try {
     // Check if user has permission to update the organization
-    const userRole = await getUserOrgRole(db, user.id, organizationId);
+    const userRole = await queryUserOrgRole(db, user.id, organizationId);
     if (userRole !== "owner" && userRole !== "admin") {
       return submission.reply({
         formErrors: ["You don't have permission to update this organization."],
@@ -152,7 +155,7 @@ export async function deleteOrganizationAction(
 
   try {
     // Check if user has permission to delete the organization
-    const userRole = await getUserOrgRole(db, user.id, organizationId);
+    const userRole = await queryUserOrgRole(db, user.id, organizationId);
     if (userRole !== "owner") {
       return submission.reply({
         formErrors: ["Only the owner can delete this organization."],
@@ -199,7 +202,7 @@ export async function leaveOrganizationAction(
 
   try {
     // Check if user has permission to leave the organization
-    const userRole = await getUserOrgRole(db, user.id, organizationId);
+    const userRole = await queryUserOrgRole(db, user.id, organizationId);
     if (userRole !== "member") {
       return submission.reply({
         formErrors: ["You don't have permission to leave this organization."],
@@ -249,7 +252,7 @@ export async function removeMemberAction(
 
   try {
     // Check if user has permission to remove members
-    const userRole = await getUserOrgRole(db, user.id, organizationId);
+    const userRole = await queryUserOrgRole(db, user.id, organizationId);
     if (userRole !== "owner" && userRole !== "admin") {
       return submission.reply({
         formErrors: [
@@ -259,7 +262,7 @@ export async function removeMemberAction(
     }
 
     // Don't allow removing the owner
-    const memberRole = await getUserOrgRole(db, memberId, organizationId);
+    const memberRole = await queryUserOrgRole(db, memberId, organizationId);
     if (memberRole === "owner") {
       return submission.reply({
         formErrors: ["Cannot remove the organization owner."],

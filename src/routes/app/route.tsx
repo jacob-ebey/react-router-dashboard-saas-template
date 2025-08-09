@@ -4,9 +4,8 @@ import { GloablLoader } from "@/components/global-loader";
 import { Icon } from "@/components/icon";
 import { LogoutForm } from "@/components/logout-form";
 import { ScrollRestorationDiv } from "@/components/scroll-restoration";
-import { getDb } from "@/db";
-import { getUserPendingInvitations } from "@/db/queries/invitation";
-import { getUserById } from "@/db/queries/user";
+import { getUserPendingInvitations } from "@/data/invitation";
+import { getUserById } from "@/data/user";
 import { requireUser, requireUserMiddleware } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
@@ -23,15 +22,14 @@ export const unstable_middleware = [requireUserMiddleware];
 
 export default async function AppLayout({ matches }: RouteComponentProps) {
   const userId = requireUser();
-  const db = getDb();
 
   // Get user details and pending invitations
-  const user = await getUserById(db, userId.id);
+  const user = await getUserById(userId.id);
   if (!user) {
     throw new Error("User not found");
   }
 
-  const pendingInvitations = await getUserPendingInvitations(db, user.email);
+  const pendingInvitations = await getUserPendingInvitations(user.email);
 
   const leafHandle = matches.at(-1)?.handle;
   const { SidebarContent } = getServerHandle(leafHandle) ?? {};

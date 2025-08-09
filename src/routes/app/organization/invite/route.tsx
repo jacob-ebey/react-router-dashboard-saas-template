@@ -3,11 +3,10 @@ import { Link } from "react-router";
 import { AccessDenied } from "@/components/access-denied";
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
-import { getDb } from "@/db";
 import {
   getOrganizationBySlugSecure,
   getUserOrgRole,
-} from "@/db/queries/organization";
+} from "@/data/organization";
 import { requireUser } from "@/lib/auth";
 
 import { InviteUserForm } from "./client";
@@ -18,19 +17,20 @@ export default async function InviteUser({
   params: { orgSlug: string };
 }) {
   const user = requireUser();
-  const db = getDb();
 
-  const organization = await getOrganizationBySlugSecure(
-    db,
-    params.orgSlug,
-    user.id
-  );
+  const organization = await getOrganizationBySlugSecure({
+    slug: params.orgSlug,
+    userId: user.id,
+  });
   if (!organization) {
     return <AccessDenied />;
   }
 
   // Check if user has permission to invite
-  const userRole = await getUserOrgRole(db, user.id, organization.id);
+  const userRole = await getUserOrgRole({
+    userId: user.id,
+    orgId: organization.id,
+  });
   if (userRole !== "owner" && userRole !== "admin" && userRole !== "manager") {
     return <AccessDenied />;
   }
