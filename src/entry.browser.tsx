@@ -14,12 +14,15 @@ import {
   type DataRouter,
 } from "react-router";
 
+import { cachedFetch, clearCachedFetch } from "@/lib/browser-cache";
+
 // Create and set the callServer function to support post-hydration server actions.
 setServerCallback(
   createCallServer({
     createFromReadableStream,
     createTemporaryReferenceSet,
     encodeReply,
+    fetch: cachedFetch,
   })
 );
 
@@ -34,6 +37,7 @@ createFromReadableStream<RSCServerPayload>(getRSCStream()).then((payload) => {
       <StrictMode>
         <RSCHydratedRouter
           createFromReadableStream={createFromReadableStream}
+          fetch={cachedFetch}
           payload={payload}
         />
       </StrictMode>,
@@ -47,6 +51,8 @@ createFromReadableStream<RSCServerPayload>(getRSCStream()).then((payload) => {
 
 if (import.meta.hot) {
   import.meta.hot.on("rsc:update", () => {
-    (window as unknown as { __router: DataRouter }).__router.revalidate();
+    clearCachedFetch().finally(() => {
+      (window as unknown as { __router: DataRouter }).__router.revalidate();
+    });
   });
 }
