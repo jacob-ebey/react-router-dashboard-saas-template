@@ -30,7 +30,7 @@ const prerender = [
   {
     id: "marketing.home",
     expiration: 30,
-    source: "/",
+    sources: "/index.html",
   },
 ].map((c) => ({
   ...c,
@@ -139,7 +139,7 @@ export default defineConfig(({ command }) => ({
             routes: [
               ...prerender.flatMap((route) => [
                 {
-                  src: route.source === "/" ? `^/$` : route.source,
+                  src: route.source,
                   dest: `/prerender-${route.id}`,
                 },
                 route.source === "/"
