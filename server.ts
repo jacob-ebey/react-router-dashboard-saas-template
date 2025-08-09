@@ -2,4 +2,4 @@ import handler from "src/entry.rsc";
 
 export const GET = handler;
 
-export const PATCH = handler;
+export const POST = handler;
