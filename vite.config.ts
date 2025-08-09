@@ -137,32 +137,10 @@ export default defineConfig(({ command }) => ({
               },
             ],
             routes: [
-              ...prerender.flatMap((route) => [
-                ...route.sources.flatMap((source) => [
-                  {
-                    src: source,
-                    dest: `/prerender-${route.id}`,
-                  },
-                  source === "/"
-                    ? {
-                        src: `/_root\\.rsc`,
-                        dest: `/prerender-${route.id}`,
-                      }
-                    : {
-                        src: `${source}\\.rsc`,
-                        dest: `/prerender-${route.id}`,
-                      },
-                ]),
-              ]),
+              { handle: "filesystem" },
               {
                 src: "/(.*)",
                 dest: "/rsc",
-              },
-            ],
-            rewrites: [
-              {
-                source: "/(.*)",
-                destination: "/rsc",
               },
             ],
           });
@@ -222,19 +200,44 @@ export default defineConfig(({ command }) => ({
 
           const functions = ["rsc"];
 
-          for (const { expiration, id } of prerender) {
-            functions.push(`prerender-${id}`);
-            fs.cpSync(
-              ".vercel/output/functions/rsc.func",
-              `.vercel/output/functions/prerender-${id}.func`,
-              { recursive: true }
-            );
-            fs.writeFileSync(
-              `.vercel/output/functions/prerender-${id}.prerender-config.json`,
-              JSON.stringify({
-                expiration,
-              })
-            );
+          for (const { expiration, id, sources } of prerender) {
+            for (const source of sources) {
+              if (source === "/") {
+                fs.writeFileSync(
+                  ".vercel/output/functions/index.func",
+                  "rsc.func"
+                );
+                fs.writeFileSync(
+                  ".vercel/output/functions/index.prerender-config.json",
+                  JSON.stringify(
+                    {
+                      expiration,
+                    },
+                    null,
+                    2
+                  )
+                );
+              } else {
+                const relative = source.startsWith("/")
+                  ? source.slice(1)
+                  : source;
+
+                fs.writeFileSync(
+                  `.vercel/output/functions/${relative}.func`,
+                  "rsc.func"
+                );
+                fs.writeFileSync(
+                  `.vercel/output/functions/${relative}.prerender-config.json`,
+                  JSON.stringify(
+                    {
+                      expiration,
+                    },
+                    null,
+                    2
+                  )
+                );
+              }
+            }
           }
 
           for (const id of functions) {
