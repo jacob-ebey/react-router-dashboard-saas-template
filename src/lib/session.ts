@@ -87,6 +87,8 @@ export async function provideSession(
   emptySessionProxy.responseGenerated();
 
   if (valuesHash === JSON.stringify(ctx.session.data)) {
+    return response;
+  }
 
   const headers = new Headers(response.headers);
   headers.append("Set-Cookie", await sessionStorage.commitSession(ctx.session));
