@@ -105,16 +105,3 @@ export async function cachedFetch(
 export async function clearCachedFetch(): Promise<void> {
   await bustCache();
 }
-
-// // Utility function to get cache info (optional, for debugging)
-// async function getCacheInfo(): Promise<{
-//   cacheId: string;
-//   keys: readonly Request[];
-// }> {
-//   const cache = await getCache();
-//   const keys = await cache.keys();
-//   return {
-//     cacheId: CACHE_ID,
-//     keys,
-//   };
-// }

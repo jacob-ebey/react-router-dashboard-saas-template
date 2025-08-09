@@ -26,6 +26,14 @@ declare global {
   var DID_CLEAN_UP: boolean | undefined;
 }
 
+const prerender = [
+  {
+    id: "marketing.home",
+    expiration: 30,
+    source: "/",
+  },
+];
+
 export default defineConfig(({ command }) => ({
   environments: {
     client: {
@@ -77,12 +85,6 @@ export default defineConfig(({ command }) => ({
     devtoolsJson(),
     {
       name: "vercel",
-      buildStart() {
-        if (!global.DID_CLEAN_UP) {
-          global.DID_CLEAN_UP = true;
-          fs.rmSync(".vercel/output", { recursive: true, force: true });
-        }
-      },
       configEnvironment(environment, config) {
         if (environment === "client") {
           config.build ??= {};
@@ -102,92 +104,152 @@ export default defineConfig(({ command }) => ({
 
         return config;
       },
-      async buildEnd() {
-        if (global.ADDED_ASSETS) return;
-        global.ADDED_ASSETS = true;
+      config(config) {
+        const buildApp = config.builder?.buildApp;
+        config.builder ??= {};
+        config.builder.buildApp = async (builder) => {
+          await buildApp?.(builder);
+          if (
+            !fs.existsSync(
+              ".vercel/output/functions/rsc.func/__vite_rsc_assets_manifest.js"
+            )
+          ) {
+            throw new Error(
+              "Vite RSC assets manifest not found. Please run `pnpm build` again."
+            );
+          }
 
-        fs.mkdirSync(".vercel/output", { recursive: true });
+          fs.mkdirSync(".vercel/output", { recursive: true });
 
-        const { routes } = getTransformedRoutes({
-          headers: [
-            {
-              source: "/assets/(.*)",
-              headers: [
-                {
-                  key: "Cache-Control",
-                  value: "public, max-age=31536000, immutable",
-                },
-              ],
-            },
-          ],
-          rewrites: [
-            {
-              source: "/(.*)",
-              destination: "/rsc",
-            },
-          ],
-        });
+          const { routes } = getTransformedRoutes({
+            headers: [
+              {
+                source: "/assets/(.*)",
+                headers: [
+                  {
+                    key: "Cache-Control",
+                    value: "public, max-age=31536000, immutable",
+                  },
+                ],
+              },
+            ],
+            rewrites: [
+              ...prerender.flatMap((route) =>
+                [
+                  {
+                    source: route.source,
+                    destination: `/prerender.${route.id}`,
+                  },
+                  {
+                    source: `${route.source}\\.rsc`,
+                    destination: `/prerender.${route.id}`,
+                  },
+                  route.source === "/"
+                    ? {
+                        source: `/_root.rsc`,
+                        destination: `/prerender.${route.id}`,
+                        expiration: route.expiration,
+                      }
+                    : null,
+                ].filter(nonNullable)
+              ),
+              {
+                source: "/(.*)",
+                destination: "/rsc",
+              },
+            ],
+          });
 
-        fs.writeFileSync(
-          ".vercel/output/config.json",
-          JSON.stringify(
-            {
-              version: 3,
-              routes,
-            },
-            null,
-            2
-          )
-        );
+          fs.writeFileSync(
+            ".vercel/output/config.json",
+            JSON.stringify(
+              {
+                version: 3,
+                routes,
+              },
+              null,
+              2
+            )
+          );
 
-        fs.mkdirSync(".vercel/output/functions/rsc.func", {
-          recursive: true,
-        });
-        fs.writeFileSync(
-          `.vercel/output/functions/rsc.func/.vc-config.json`,
-          JSON.stringify(
-            {
-              runtime: "nodejs22.x",
-              handler: "index.js",
-              launcherType: "Nodejs",
-            },
-            null,
-            2
-          )
-        );
-        fs.cpSync(
-          "pnpm-lock.yaml",
-          ".vercel/output/functions/rsc.func/pnpm-lock.yaml"
-        );
-        fs.writeFileSync(
-          ".vercel/output/functions/rsc.func/pnpm-workspace.yaml",
-          "symlink: false\nnodeLinker: hoisted\n"
-        );
+          fs.mkdirSync(".vercel/output/functions/rsc.func", {
+            recursive: true,
+          });
+          fs.writeFileSync(
+            `.vercel/output/functions/rsc.func/.vc-config.json`,
+            JSON.stringify(
+              {
+                runtime: "nodejs22.x",
+                handler: "index.js",
+                launcherType: "Nodejs",
+              },
+              null,
+              2
+            )
+          );
+          fs.cpSync(
+            "pnpm-lock.yaml",
+            ".vercel/output/functions/rsc.func/pnpm-lock.yaml"
+          );
+          fs.writeFileSync(
+            ".vercel/output/functions/rsc.func/pnpm-workspace.yaml",
+            "symlink: false\nnodeLinker: hoisted\n"
+          );
 
-        const { dependencies, devDependencies } = JSON.parse(
-          fs.readFileSync("package.json", "utf-8")
-        );
-        fs.writeFileSync(
-          ".vercel/output/functions/rsc.func/package.json",
-          JSON.stringify(
-            {
-              private: true,
-              type: "module",
-              dependencies,
-              devDependencies,
-            },
-            null,
-            2
-          )
-        );
+          const { dependencies, devDependencies } = JSON.parse(
+            fs.readFileSync("package.json", "utf-8")
+          );
+          fs.writeFileSync(
+            ".vercel/output/functions/rsc.func/package.json",
+            JSON.stringify(
+              {
+                private: true,
+                type: "module",
+                dependencies,
+                devDependencies,
+              },
+              null,
+              2
+            )
+          );
 
-        // Run pnpm install --prod --prefer-offline inside the rsc.func directory
-        await $({
-          cwd: path.resolve(".vercel/output/functions/rsc.func"),
-          stderr: "inherit",
-          stdout: "inherit",
-        })`pnpm install --prod --prefer-offline`;
+          const functions = ["rsc"];
+
+          for (const { expiration, id } of prerender) {
+            functions.push(id);
+            fs.cpSync(
+              ".vercel/output/functions/rsc.func",
+              `.vercel/output/functions/${id}.func`,
+              { recursive: true }
+            );
+            fs.writeFileSync(
+              `.vercel/output/functions/${id}.prerender-config.json`,
+              JSON.stringify({
+                expiration,
+              })
+            );
+          }
+
+          for (const id of functions) {
+            // Run pnpm install --prod --prefer-offline inside the rsc.func directory
+            await $({
+              cwd: path.resolve(`.vercel/output/functions/${id}.func`),
+              stderr: "inherit",
+              stdout: "inherit",
+            })`pnpm install --prod --prefer-offline`;
+          }
+        };
+      },
+      buildStart() {
+        if (!global.DID_CLEAN_UP) {
+          global.DID_CLEAN_UP = true;
+          fs.rmSync(".vercel/output", { recursive: true, force: true });
+        }
       },
     },
   ],
 }));
+
+function nonNullable<T>(value: T): value is NonNullable<T> {
+  return value !== null && value !== undefined;
+}
