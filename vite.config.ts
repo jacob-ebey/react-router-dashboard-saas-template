@@ -139,7 +139,7 @@ export default defineConfig(({ command }) => ({
             routes: [
               ...prerender.flatMap((route) => [
                 {
-                  src: route.source,
+                  src: route.source === "/" ? `^/$` : route.source,
                   dest: `/prerender-${route.id}`,
                 },
                 route.source === "/"
@@ -152,6 +152,10 @@ export default defineConfig(({ command }) => ({
                       dest: `/prerender-${route.id}`,
                     },
               ]),
+              {
+                src: "/(.*)",
+                dest: "/rsc",
+              },
             ],
             rewrites: [
               {
