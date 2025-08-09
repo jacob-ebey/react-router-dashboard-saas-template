@@ -134,25 +134,22 @@ export default defineConfig(({ command }) => ({
               },
             ],
             rewrites: [
-              ...prerender.flatMap((route) =>
-                [
-                  {
-                    source: route.source,
-                    destination: `/prerender.${route.id}`,
-                  },
-                  {
-                    source: `${route.source}\\.rsc`,
-                    destination: `/prerender.${route.id}`,
-                  },
-                  route.source === "/"
-                    ? {
-                        source: `/_root.rsc`,
-                        destination: `/prerender.${route.id}`,
-                        expiration: route.expiration,
-                      }
-                    : null,
-                ].filter(nonNullable)
-              ),
+              ...prerender.flatMap((route) => [
+                {
+                  source: route.source,
+                  destination: `/prerender.${route.id}`,
+                },
+                route.source === "/"
+                  ? {
+                      source: `/_root.rsc`,
+                      destination: `/prerender.${route.id}`,
+                      expiration: route.expiration,
+                    }
+                  : {
+                      source: `${route.source}.rsc`,
+                      destination: `/prerender.${route.id}`,
+                    },
+              ]),
               {
                 source: "/(.*)",
                 destination: "/rsc",
@@ -249,7 +246,3 @@ export default defineConfig(({ command }) => ({
     },
   ],
 }));
-
-function nonNullable<T>(value: T): value is NonNullable<T> {
-  return value !== null && value !== undefined;
-}
