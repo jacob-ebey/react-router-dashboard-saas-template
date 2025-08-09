@@ -109,6 +109,17 @@ export default defineConfig(({ command }) => ({
         fs.mkdirSync(".vercel/output", { recursive: true });
 
         const { routes } = getTransformedRoutes({
+          headers: [
+            {
+              source: "/assets/(.*)",
+              headers: [
+                {
+                  key: "Cache-Control",
+                  value: "public, max-age=31536000, immutable",
+                },
+              ],
+            },
+          ],
           rewrites: [
             {
               source: "/(.*)",
