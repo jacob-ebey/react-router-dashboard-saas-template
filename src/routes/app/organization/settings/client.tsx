@@ -209,7 +209,7 @@ export function OrganizationSettingsForms({
 
       {/* Delete Modal */}
       <Modal id="delete-organization-modal" position="end" clickAwayToClose>
-        <ModalContent className="space-y-4 w-full max-w-md" closeButton="right">
+        <ModalContent className="space-y-4 w-full max-w-md">
           <h3 className="font-bold text-lg text-error">Delete Organization</h3>
           <p>
             Are you sure you want to delete <strong>{organization.name}</strong>
@@ -225,7 +225,7 @@ export function OrganizationSettingsForms({
 
       {/* Leave Modal */}
       <Modal id="leave-organization-modal" position="end" clickAwayToClose>
-        <ModalContent className="space-y-4 w-full max-w-md" closeButton="right">
+        <ModalContent className="space-y-4 w-full max-w-md">
           <h3 className="font-bold text-lg text-error">Leave Organization</h3>
           <p>
             Are you sure you want to leave <strong>{organization.name}</strong>?
@@ -242,7 +242,7 @@ export function OrganizationSettingsForms({
 
       {/* Invite Modal */}
       <Modal id="invite-modal" position="end" clickAwayToClose>
-        <ModalContent className="max-w-lg w-full space-y-4" closeButton="right">
+        <ModalContent className="max-w-lg w-full space-y-4">
           <h3 className="font-bold text-lg">Invite User</h3>
           <p>
             Send an invitation to join <strong>{organization.name}</strong>.
@@ -256,7 +256,7 @@ export function OrganizationSettingsForms({
 
       {/* Delete Invitation Modal */}
       <Modal id="delete-invitation-modal" position="end" clickAwayToClose>
-        <ModalContent className="space-y-4 w-full max-w-md" closeButton="right">
+        <ModalContent className="space-y-4 w-full max-w-md">
           <h3 className="font-bold text-lg text-error mb-4">
             Delete Invitation
           </h3>

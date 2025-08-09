@@ -44,10 +44,7 @@ export function NotificationsPanel({ invitations }: NotificationsPanelProps) {
 
       {/* Notifications Dialog - similar to sidebar pattern */}
       <Modal id="notifications_dialog" position="end" clickAwayToClose>
-        <ModalContent
-          className="w-full max-w-md h-full space-y-4"
-          closeButton="right"
-        >
+        <ModalContent className="w-full max-w-md h-full space-y-4">
           <h3 className="text-lg font-bold">Notifications</h3>
           <NotificationsContent invitations={invitations} />
         </ModalContent>

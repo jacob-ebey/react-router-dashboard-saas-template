@@ -39,13 +39,13 @@ export function Modal({
 }
 
 export type ModalContentProps = React.ComponentProps<"div"> & {
-  closeButton?: "left" | "right";
+  closeButton?: "left" | "right" | false;
 };
 
 export function ModalContent({
   children,
   className,
-  closeButton,
+  closeButton = "right",
   ...props
 }: ModalContentProps) {
   return (
