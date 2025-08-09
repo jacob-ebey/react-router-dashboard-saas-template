@@ -28,9 +28,9 @@ declare global {
 
 const prerender = [
   {
-    id: "marketing.home",
+    id: "prerender-marketing",
     expiration: 30,
-    sources: "/index.html",
+    sources: ["/", "/login"],
   },
 ].map((c) => ({
   ...c,
@@ -138,19 +138,21 @@ export default defineConfig(({ command }) => ({
             ],
             routes: [
               ...prerender.flatMap((route) => [
-                {
-                  src: route.source,
-                  dest: `/prerender-${route.id}`,
-                },
-                route.source === "/"
-                  ? {
-                      src: `/_root\\.rsc`,
-                      dest: `/prerender-${route.id}`,
-                    }
-                  : {
-                      src: `${route.source}\\.rsc`,
-                      dest: `/prerender-${route.id}`,
-                    },
+                ...route.sources.flatMap((source) => [
+                  {
+                    src: source,
+                    dest: `/prerender-${route.id}`,
+                  },
+                  source === "/"
+                    ? {
+                        src: `/_root\\.rsc`,
+                        dest: `/prerender-${route.id}`,
+                      }
+                    : {
+                        src: `${source}\\.rsc`,
+                        dest: `/prerender-${route.id}`,
+                      },
+                ]),
               ]),
               {
                 src: "/(.*)",
