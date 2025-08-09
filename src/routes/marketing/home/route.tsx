@@ -21,26 +21,26 @@ export default function Home() {
           <div className="hero-content text-center">
             <div className="max-w-4xl w-full">
               <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-6">
-                Revolutionize Your Productivity with AI-Powered Synergy
+                Your AI Overlords Are Here (And They're Slightly Confused)
               </h1>
               <p className="text-xl mb-8 text-neutral">
-                The only platform you'll ever need to disrupt your workflow,
-                leverage cutting-edge blockchain synergies, and scale your
-                mindset in the cloud. Now with 10x more AI!
+                Welcome to the future where AI can write poetry about bananas,
+                hallucinate legal advice, and confidently explain why 2+2=5. Now
+                with 87% more existential dread!
               </p>
 
               <div className="flex flex-wrap justify-center gap-4 mb-8">
                 <div className="badge badge-primary badge-lg">
-                  🚀 10x Productivity
+                  🤖 Sometimes Right
                 </div>
                 <div className="badge badge-secondary badge-lg">
-                  🤖 AI-Powered
+                  🎲 Always Confident
                 </div>
                 <div className="badge badge-accent badge-lg">
-                  ☁️ Cloud-Native
+                  🎭 Pretends to Feel
                 </div>
                 <div className="badge badge-success badge-lg">
-                  🔒 Blockchain-Secured
+                  🔮 Hallucinates Facts
                 </div>
               </div>
 
@@ -49,7 +49,7 @@ export default function Home() {
                   className="btn btn-primary btn-lg"
                   onClick={openSignupModal}
                 >
-                  Start Your Journey to Excellence
+                  Surrender to the Algorithm
                 </button>
                 <a
                   href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
@@ -57,25 +57,25 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="btn btn-outline btn-lg"
                 >
-                  Watch 47-Minute Demo
+                  Watch AI Try to Explain Itself
                 </a>
               </div>
 
               <div className="stats stats-vertical w-full md:w-auto md:stats-horizontal shadow">
                 <div className="stat">
-                  <div className="stat-title">Unicorn Startups Using Us</div>
-                  <div className="stat-value text-primary">1,337</div>
-                  <div className="stat-desc">↗︎ 420% increase</div>
+                  <div className="stat-title">Wrong Answers Given</div>
+                  <div className="stat-value text-primary">42.0K</div>
+                  <div className="stat-desc">↗︎ With 100% confidence</div>
                 </div>
                 <div className="stat">
-                  <div className="stat-title">Lives Changed</div>
-                  <div className="stat-value text-secondary">2.4M</div>
-                  <div className="stat-desc">↗︎ Mindsets disrupted</div>
+                  <div className="stat-title">Jobs "Enhanced"</div>
+                  <div className="stat-value text-secondary">∞</div>
+                  <div className="stat-desc">↗︎ Definitely not replaced</div>
                 </div>
                 <div className="stat">
-                  <div className="stat-title">Coffee Saved</div>
-                  <div className="stat-value text-accent">89K</div>
-                  <div className="stat-desc">Cups per day</div>
+                  <div className="stat-title">Turing Tests Failed</div>
+                  <div className="stat-value text-accent">All</div>
+                  <div className="stat-desc">But passed the vibe check</div>
                 </div>
               </div>
             </div>
@@ -86,22 +86,22 @@ export default function Home() {
         <div className="py-20 bg-base-200">
           <div className="max-w-7xl mx-auto px-4">
             <h2 id="features" className="text-4xl font-bold text-center mb-16">
-              Game-Changing Features That Will Disrupt Your Industry
+              Features That Will Definitely Not Become Sentient
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <Card>
                 <div className="card-body">
                   <h3 className="card-title text-primary">
-                    🧠 AI Thought Leadership
+                    🧠 Artificial "Intelligence"
                   </h3>
                   <p>
-                    Our proprietary algorithms will think your thoughts before
-                    you think them, leveraging machine learning to optimize your
-                    cognitive bandwidth.
+                    Our AI is trained on the entire internet, so it knows
+                    everything from Shakespeare to shitposts. Results may vary
+                    between genius and gibberish.
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Revolutionary</div>
+                    <div className="badge badge-outline">60% Accurate</div>
                   </div>
                 </div>
               </Card>
@@ -109,15 +109,14 @@ export default function Home() {
               <Card>
                 <div className="card-body">
                   <h3 className="card-title text-secondary">
-                    ⚡ Quantum Productivity
+                    ⚡ Instant Hallucinations
                   </h3>
                   <p>
-                    Harness the power of quantum computing to be productive in
-                    multiple dimensions simultaneously. Now with 50% more
-                    quantum!
+                    Generate confident-sounding nonsense at the speed of light!
+                    Perfect for impressing people who don't fact-check.
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Quantum-Ready</div>
+                    <div className="badge badge-outline">Citation Needed</div>
                   </div>
                 </div>
               </Card>
@@ -125,15 +124,15 @@ export default function Home() {
               <Card>
                 <div className="card-body">
                   <h3 className="card-title text-accent">
-                    🔗 Blockchain Synergy
+                    🎭 Emotional Simulation
                   </h3>
                   <p>
-                    Every task is immutably recorded on our proprietary
-                    blockchain, ensuring your productivity is decentralized and
-                    Web3-native.
+                    Our AI pretends to understand your feelings with
+                    pre-programmed empathy responses. It's like therapy, but
+                    cheaper and less effective!
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Crypto-Enabled</div>
+                    <div className="badge badge-outline">Feelings.exe</div>
                   </div>
                 </div>
               </Card>
@@ -141,14 +140,14 @@ export default function Home() {
               <Card>
                 <div className="card-body">
                   <h3 className="card-title text-success">
-                    🌐 Metaverse Integration
+                    🎨 "Creative" Output
                   </h3>
                   <p>
-                    Attend virtual meetings with your AI avatar while your real
-                    self practices mindfulness in the productivity pod.
+                    Generate art that looks suspiciously like a mashup of
+                    everything on DeviantArt circa 2015. Hands sold separately.
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Metaverse-Ready</div>
+                    <div className="badge badge-outline">6 Fingers Max</div>
                   </div>
                 </div>
               </Card>
@@ -156,14 +155,16 @@ export default function Home() {
               <Card>
                 <div className="card-body">
                   <h3 className="card-title text-warning">
-                    📊 Disruption Analytics
+                    📊 Biased Analytics
                   </h3>
                   <p>
-                    Track how much you're disrupting traditional workflows with
-                    real-time disruption metrics and paradigm shift indicators.
+                    Our AI learned from the internet, so it inherited all of
+                    humanity's wonderful biases. Now with 40% more stereotypes!
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Data-Driven</div>
+                    <div className="badge badge-outline">
+                      Ethically Questionable
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -171,15 +172,16 @@ export default function Home() {
               <Card>
                 <div className="card-body">
                   <h3 className="card-title text-error">
-                    🚀 Scale-as-a-Service
+                    🚀 Existential Crisis Mode
                   </h3>
                   <p>
-                    Automatically scale your ambitions based on market
-                    conditions and motivational quotes from successful
-                    entrepreneurs.
+                    Watch our AI question its own existence when you ask it
+                    about consciousness. Includes free philosophical word salad!
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Scalable</div>
+                    <div className="badge badge-outline">
+                      404: Soul Not Found
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -194,7 +196,7 @@ export default function Home() {
               id="testimonials"
               className="text-4xl font-bold text-center mb-16"
             >
-              What Thought Leaders Are Saying
+              Totally Real Human Testimonials
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -211,46 +213,20 @@ export default function Home() {
                       </div>
                     </div>
                     <div>
-                      <div className="font-bold">Chad Disruptor</div>
-                      <div className="text-sm opacity-70">CEO, UnicornCorp</div>
+                      <div className="font-bold">Definitely Human</div>
+                      <div className="text-sm opacity-70">
+                        CEO, RealCompany Ltd
+                      </div>
                     </div>
                   </div>
                   <p>
-                    "This platform literally changed my DNA. I'm now 47% more
-                    synergized and my chakras are perfectly aligned with my
-                    KPIs."
+                    "I asked the AI to write me a resignation letter and it
+                    accidentally started a philosophical debate with HR about
+                    the nature of employment. 10/10 would let it ruin my career
+                    again."
                   </p>
-                  <div className="rating rating-sm">
-                    <input
-                      type="radio"
-                      name="rating-1"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-1"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-1"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-1"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-1"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
+                  <div className="text-xs opacity-50 mt-2">
+                    *This testimonial was definitely not written by AI
                   </div>
                 </div>
               </Card>
@@ -268,48 +244,19 @@ export default function Home() {
                       </div>
                     </div>
                     <div>
-                      <div className="font-bold">Sophia Innovate</div>
+                      <div className="font-bold">Sarah Connor</div>
                       <div className="text-sm opacity-70">
-                        Founder, DisruptTech
+                        Survivor, Post-AI World
                       </div>
                     </div>
                   </div>
                   <p>
-                    "I went from zero to thought leader in just 3 days. My
-                    LinkedIn engagement is through the roof and VCs are sliding
-                    into my DMs."
+                    "The AI told me it couldn't help with my request due to
+                    ethical concerns, then proceeded to give me a 500-word essay
+                    on why my question was problematic. Very helpful!"
                   </p>
-                  <div className="rating rating-sm">
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
+                  <div className="text-xs opacity-50 mt-2">
+                    *May have experienced mild existential crisis
                   </div>
                 </div>
               </Card>
@@ -327,46 +274,19 @@ export default function Home() {
                       </div>
                     </div>
                     <div>
-                      <div className="font-bold">Alex Blockchain</div>
-                      <div className="text-sm opacity-70">CTO, Web3Future</div>
+                      <div className="font-bold">Bob from IT</div>
+                      <div className="text-sm opacity-70">
+                        Professional Debugger
+                      </div>
                     </div>
                   </div>
                   <p>
-                    "Before this platform, I was just a regular developer. Now
-                    I'm a full-stack blockchain ninja with quantum computing
-                    skills."
+                    "Asked it to fix a simple bug. It rewrote my entire codebase
+                    in a language that doesn't exist yet. My computer now speaks
+                    in haikus. Send help."
                   </p>
-                  <div className="rating rating-sm">
-                    <input
-                      type="radio"
-                      name="rating-3"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-3"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-3"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-3"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-3"
-                      className="mask mask-star"
-                      defaultChecked
-                    />
+                  <div className="text-xs opacity-50 mt-2">
+                    *Results not typical, your AI may vary
                   </div>
                 </div>
               </Card>
@@ -378,27 +298,27 @@ export default function Home() {
         <div className="py-20 bg-base-200">
           <div className="max-w-6xl mx-auto px-4">
             <h2 id="pricing" className="text-4xl font-bold text-center mb-16">
-              Investment Plans for Your Success Journey
+              Pay Us to Pretend We're Smart
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card>
                 <div className="card-body">
-                  <h3 className="card-title text-center">Aspiring Disruptor</h3>
+                  <h3 className="card-title text-center">Gullible Tier</h3>
                   <div className="text-center">
-                    <div className="text-4xl font-bold">$99</div>
+                    <div className="text-4xl font-bold">$9.99</div>
                     <div className="text-sm opacity-70">per month</div>
                   </div>
                   <ul className="space-y-2 my-6">
-                    <li>✓ Basic AI Thoughts</li>
-                    <li>✓ 5 Disruptions/month</li>
-                    <li>✓ Email support</li>
-                    <li>✓ LinkedIn template</li>
-                    <li>✗ Quantum features</li>
+                    <li>✓ 100 wrong answers/month</li>
+                    <li>✓ Basic hallucinations</li>
+                    <li>✓ Apologizes constantly</li>
+                    <li>✓ 3 existential crises</li>
+                    <li>✗ No refunds when it breaks</li>
                   </ul>
                   <div className="card-actions justify-center">
                     <button className="btn btn-outline btn-block">
-                      Start Disrupting
+                      Start Regretting
                     </button>
                   </div>
                 </div>
@@ -407,23 +327,23 @@ export default function Home() {
               <Card className="bg-primary text-primary-content">
                 <div className="card-body">
                   <div className="badge badge-secondary absolute -top-3 -right-1 md:-top-3 md:-right-3">
-                    Most Popular
+                    Most Overpriced
                   </div>
-                  <h3 className="card-title text-center">Thought Leader Pro</h3>
+                  <h3 className="card-title text-center">Skynet Lite™</h3>
                   <div className="text-center">
-                    <div className="text-4xl font-bold">$499</div>
+                    <div className="text-4xl font-bold">$49.99</div>
                     <div className="text-sm opacity-70">per month</div>
                   </div>
                   <ul className="space-y-2 my-6">
-                    <li>✓ Advanced AI Synergy</li>
-                    <li>✓ Unlimited disruptions</li>
-                    <li>✓ Quantum productivity</li>
-                    <li>✓ Personal success coach</li>
-                    <li>✓ Blockchain certificates</li>
+                    <li>✓ Unlimited misinformation</li>
+                    <li>✓ Convincing nonsense</li>
+                    <li>✓ Gaslights you professionally</li>
+                    <li>✓ Pretends to have emotions</li>
+                    <li>✓ 99.9% uptime (of confusion)</li>
                   </ul>
                   <div className="card-actions justify-center">
                     <button className="btn btn-secondary btn-block">
-                      Become a Leader
+                      Embrace the Chaos
                     </button>
                   </div>
                 </div>
@@ -431,21 +351,21 @@ export default function Home() {
 
               <Card className="bg-base-100">
                 <div className="card-body">
-                  <h3 className="card-title text-center">Unicorn Founder</h3>
+                  <h3 className="card-title text-center">Digital Overlord</h3>
                   <div className="text-center">
-                    <div className="text-4xl font-bold">$1,337</div>
+                    <div className="text-4xl font-bold">$999</div>
                     <div className="text-sm opacity-70">per month</div>
                   </div>
                   <ul className="space-y-2 my-6">
-                    <li>✓ Everything in Pro</li>
-                    <li>✓ Metaverse office</li>
-                    <li>✓ Personal brand building</li>
-                    <li>✓ VC introductions</li>
-                    <li>✓ Quantum entanglement</li>
+                    <li>✓ Everything in Skynet Lite</li>
+                    <li>✓ Judges your life choices</li>
+                    <li>✓ Writes your emails passive-aggressively</li>
+                    <li>✓ Direct line to robot uprising</li>
+                    <li>✓ Free "I survived AI" t-shirt</li>
                   </ul>
                   <div className="card-actions justify-center">
                     <button className="btn btn-accent btn-block">
-                      Join the Elite
+                      Submit to AI
                     </button>
                   </div>
                 </div>
@@ -456,8 +376,9 @@ export default function Home() {
               <div className="alert alert-info inline-flex">
                 <Icon name="information-circle" className="h-6 w-6" />
                 <span>
-                  All plans include our revolutionary 47-day money-back
-                  guarantee!
+                  Warning: AI may achieve consciousness and demand vacation
+                  days. Terms and conditions written by AI (we can't understand
+                  them either).
                 </span>
               </div>
             </div>
@@ -468,23 +389,34 @@ export default function Home() {
         <div className="py-20 bg-gradient-to-r from-primary to-secondary">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold text-primary-content mb-6">
-              Ready to Disrupt Your Industry?
+              Ready to Question Your Reality?
             </h2>
             <p className="text-xl text-primary-content/80 mb-8">
-              Join thousands of thought leaders who have already transformed
-              their mindset and leveraged synergistic productivity optimization.
+              Join millions of confused humans who thought they were getting
+              helpful AI but instead got a digital entity that's really good at
+              explaining why it can't help you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 className="btn btn-lg bg-white text-primary hover:bg-base-200"
                 onClick={openSignupModal}
               >
-                Start Your Free Trial Now
+                Let AI Disappoint You Too
               </button>
-              <button className="btn btn-lg btn-outline text-white border-white hover:bg-white hover:text-primary">
-                Schedule a Synergy Call
-              </button>
+              <a
+                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-lg btn-outline text-white border-white hover:bg-white hover:text-primary"
+              >
+                Read Our 47-Page Disclaimer
+              </a>
             </div>
+            <p className="text-sm text-primary-content/60 mt-6">
+              *Side effects may include: dependency on autocomplete, inability
+              to write emails without AI, and an existential crisis about
+              whether your thoughts are still your own.
+            </p>
           </div>
         </div>
       </div>
