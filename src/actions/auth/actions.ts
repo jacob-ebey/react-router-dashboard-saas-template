@@ -16,12 +16,12 @@ import { validateRedirect } from "@/lib/utils";
 
 import { LoginFormSchema, SignupFormSchema } from "./schema";
 
-export async function logout() {
+export async function logoutAction() {
   destroySession();
   redirect(DEFAULT_LOGOUT_REDIRECT_PATH);
 }
 
-export async function login(
+export async function loginAction(
   _: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {
@@ -55,7 +55,7 @@ export async function login(
   return submission.reply({ resetForm: true });
 }
 
-export async function signup(
+export async function signupAction(
   _: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {

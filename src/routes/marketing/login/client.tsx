@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useSearchParams } from "react-router";
 
-import { login } from "@/actions/auth/actions";
+import { loginAction } from "@/actions/auth/actions";
 import { LoginFormSchema } from "@/actions/auth/schema";
 import {
   Form,
@@ -14,7 +14,7 @@ import {
 } from "@/components/form";
 
 export function LoginForm() {
-  const [lastResult, action, pending] = useActionState(login, undefined);
+  const [lastResult, action, pending] = useActionState(loginAction, undefined);
 
   const [form, fields] = useForm({
     action,

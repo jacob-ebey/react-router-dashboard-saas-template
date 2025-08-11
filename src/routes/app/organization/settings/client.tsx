@@ -26,7 +26,7 @@ import { Modal, ModalContent } from "@/components/ui/modal";
 import { closeModal, openModal } from "@/components/ui/modal-on";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
 
-import { deleteInvitationAndRemoveUser } from "@/actions/invitation/actions";
+import { deleteInvitationAndRemoveUserAction } from "@/actions/invitation/actions";
 import { DeleteInvitationFormSchema } from "@/actions/invitation/schema";
 
 import { InviteUserForm } from "../invite/client";
@@ -290,7 +290,7 @@ function DeleteInvitationForm({
   isAccepted: boolean;
 }) {
   const [lastResult, action, pending] = useActionState(
-    deleteInvitationAndRemoveUser,
+    deleteInvitationAndRemoveUserAction,
     undefined
   );
 

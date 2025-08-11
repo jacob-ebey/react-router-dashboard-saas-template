@@ -32,7 +32,7 @@ import {
   DeleteInvitationFormSchema,
 } from "./schema";
 
-export async function inviteUser(
+export async function inviteUserAction(
   _prevState: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {
@@ -119,7 +119,7 @@ export async function inviteUser(
   }
 }
 
-export async function acceptInvitation(
+export async function acceptInvitationAction(
   _prevState: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {
@@ -207,7 +207,7 @@ export async function acceptInvitation(
   }
 }
 
-export async function deleteInvitationAndRemoveUser(
+export async function deleteInvitationAndRemoveUserAction(
   _prevState: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {
@@ -273,7 +273,7 @@ export async function deleteInvitationAndRemoveUser(
   }
 }
 
-export async function declineInvitation(
+export async function declineInvitationAction(
   _prevState: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {

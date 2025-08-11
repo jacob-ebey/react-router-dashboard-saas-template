@@ -22,7 +22,7 @@ import {
   UpdateNameSchema,
 } from "./schema";
 
-export async function updateName(
+export async function updateNameAction(
   _: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {
@@ -47,7 +47,7 @@ export async function updateName(
   return submission.reply({ resetForm: false });
 }
 
-export async function changePassword(
+export async function changePasswordAction(
   _: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {
@@ -88,7 +88,7 @@ export async function changePassword(
   return submission.reply({ resetForm: true });
 }
 
-export async function deleteAccount(
+export async function deleteAccountAction(
   _: SubmissionResult | undefined,
   formData: FormData
 ): Promise<SubmissionResult> {

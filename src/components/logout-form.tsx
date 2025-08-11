@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { logout } from "@/actions/auth/actions";
+import { logoutAction } from "@/actions/auth/actions";
 
 export function LogoutForm() {
-  const [_, action, pending] = useActionState(logout, undefined);
+  const [_, action, pending] = useActionState(logoutAction, undefined);
 
   return (
     <form action={action}>

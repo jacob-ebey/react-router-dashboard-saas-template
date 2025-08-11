@@ -3,9 +3,9 @@
 import { useActionState, useState } from "react";
 
 import {
-  changePassword,
-  deleteAccount,
-  updateName,
+  changePasswordAction,
+  deleteAccountAction,
+  updateNameAction,
 } from "@/actions/profile/actions";
 import {
   ChangePasswordSchema,
@@ -75,7 +75,7 @@ function UserInfoSection({ user }: { user: User }) {
 }
 
 function UpdateNameForm({ currentName }: { currentName: string | null }) {
-  const [lastResult, action, pending] = useActionState(updateName, undefined);
+  const [lastResult, action, pending] = useActionState(updateNameAction, undefined);
 
   const [form, fields] = useForm({
     action,
@@ -125,7 +125,7 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
 
 function ChangePasswordForm() {
   const [lastResult, action, pending] = useActionState(
-    changePassword,
+    changePasswordAction,
     undefined
   );
 
@@ -193,7 +193,7 @@ function ChangePasswordForm() {
 function DeleteAccountForm({ userEmail }: { userEmail: string }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [lastResult, action, pending] = useActionState(
-    deleteAccount,
+    deleteAccountAction,
     undefined
   );
 

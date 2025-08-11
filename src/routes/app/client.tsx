@@ -3,8 +3,8 @@
 import { startTransition, useActionState } from "react";
 
 import {
-  acceptInvitation,
-  declineInvitation,
+  acceptInvitationAction,
+  declineInvitationAction,
 } from "@/actions/invitation/actions";
 import { Icon } from "@/components/icon";
 import type { Organization, OrganizationInvitation, User } from "@/db/schema";
@@ -98,12 +98,12 @@ function InvitationNotification({
   invitedBy: Pick<User, "id" | "email" | "name" | "avatar">;
 }) {
   const [acceptResult, acceptAction, acceptPending] = useActionState(
-    acceptInvitation,
+    acceptInvitationAction,
     undefined
   );
 
   const [declineResult, declineAction, declinePending] = useActionState(
-    declineInvitation,
+    declineInvitationAction,
     undefined
   );
 

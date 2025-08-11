@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 
-import { inviteUser } from "@/actions/invitation/actions";
+import { inviteUserAction } from "@/actions/invitation/actions";
 import { InviteUserFormSchema } from "@/actions/invitation/schema";
 import {
   Form,
@@ -23,12 +23,12 @@ export function InviteUserForm({
 }) {
   const [lastResult, action, pending] = useActionState(
     (async (prevState, formData) => {
-      const result = await inviteUser(prevState, formData);
+      const result = await inviteUserAction(prevState, formData);
       if (onSuccess && result.status !== "error") {
         onSuccess();
       }
       return result;
-    }) satisfies typeof inviteUser,
+    }) satisfies typeof inviteUserAction,
     undefined
   );
 

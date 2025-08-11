@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useSearchParams } from "react-router";
 
-import { signup } from "@/actions/auth/actions";
+import { signupAction } from "@/actions/auth/actions";
 import { SignupFormSchema } from "@/actions/auth/schema";
 import {
   Form,
@@ -14,7 +14,7 @@ import {
 } from "@/components/form";
 
 export function SignupForm() {
-  const [lastResult, action, pending] = useActionState(signup, undefined);
+  const [lastResult, action, pending] = useActionState(signupAction, undefined);
 
   const [form, fields] = useForm({
     action,
