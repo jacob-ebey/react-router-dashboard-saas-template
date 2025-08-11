@@ -4,7 +4,14 @@ import { useActionState, useState } from "react";
 
 import { createOrganizationAction } from "@/actions/organization/actions";
 import { CreateOrganizationFormSchema } from "@/actions/organization/schema";
-import { Form, FormErrors, Input, Textarea, useForm } from "@/components/form";
+import {
+  Form,
+  FormErrors,
+  FormSuccessMessage,
+  Input,
+  Textarea,
+  useForm,
+} from "@/components/form";
 
 export function CreateOrganizationForm() {
   const [lastResult, action, pending] = useActionState(
@@ -74,21 +81,29 @@ export function CreateOrganizationForm() {
         rows={3}
       />
       <FormErrors form={form} />
-      <div className="grid grid-flow-col gap-1">
-        <button className="btn btn-primary" type="submit">
-          {pending ? "Creating..." : "Create Organization"}
-        </button>
-        <button
-          className="btn btn-ghost"
-          type="button"
-          onClick={() => {
-            setShowCreateForm(false);
-            form.reset();
-          }}
-        >
-          Cancel
-        </button>
-      </div>
+
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="grid grid-flow-col gap-1">
+            <button className="btn btn-primary" type="submit">
+              {pending ? "Creating..." : "Create Organization"}
+            </button>
+            <button
+              className="btn btn-ghost"
+              type="button"
+              onClick={() => {
+                setShowCreateForm(false);
+                form.reset();
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        }
+      >
+        Organization created successfully!
+      </FormSuccessMessage>
     </Form>
   );
 }

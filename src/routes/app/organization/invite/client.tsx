@@ -4,8 +4,14 @@ import { useActionState } from "react";
 
 import { inviteUser } from "@/actions/invitation/actions";
 import { InviteUserFormSchema } from "@/actions/invitation/schema";
-import { Form, Input, Select, useForm } from "@/components/form";
-import { Icon } from "@/components/icon";
+import {
+  Form,
+  FormErrors,
+  FormSuccessMessage,
+  Input,
+  Select,
+  useForm,
+} from "@/components/form";
 import type { Organization } from "@/db/schema";
 
 export function InviteUserForm({
@@ -73,29 +79,31 @@ export function InviteUserForm({
         </div>
       </div>
 
-      <div id={form.errorId} className="text-error">
-        {form.errors}
-      </div>
+      <FormErrors form={form} />
 
-      <div className="grid gap-1">
-        <button className="btn btn-primary" type="submit" disabled={pending}>
-          {pending ? (
-            <span
-              className="loading loading-dots loading-md"
-              aria-label="Sending invitation..."
-            />
-          ) : (
-            "Send Invitation"
-          )}
-        </button>
-      </div>
-
-      {!pending && lastResult && lastResult.status !== "error" && (
-        <div className="alert alert-success">
-          <Icon name="check-circle" className="h-6 w-6 shrink-0" />
-          <span>Invitation sent successfully!</span>
-        </div>
-      )}
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="grid gap-1">
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={pending}
+            >
+              {pending ? (
+                <span
+                  className="loading loading-dots loading-md"
+                  aria-label="Sending invitation..."
+                />
+              ) : (
+                "Send Invitation"
+              )}
+            </button>
+          </div>
+        }
+      >
+        Invitation sent successfully!
+      </FormSuccessMessage>
     </Form>
   );
 }

@@ -12,7 +12,14 @@ import {
   LeaveOrganizationFormSchema,
   UpdateOrganizationFormSchema,
 } from "@/actions/organization/schema";
-import { Form, FormErrors, Input, Textarea, useForm } from "@/components/form";
+import {
+  Form,
+  FormErrors,
+  FormSuccessMessage,
+  Input,
+  Textarea,
+  useForm,
+} from "@/components/form";
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
 import { Modal, ModalContent } from "@/components/ui/modal";
@@ -440,25 +447,29 @@ function UpdateOrganizationForm({
 
       <FormErrors form={form} />
 
-      {lastResult && lastResult.status !== "error" && (
-        <div className="alert alert-success">
-          <Icon name="check-circle" className="h-6 w-6" />
-          <span>Organization settings updated successfully!</span>
-        </div>
-      )}
-
-      <div className="card-actions justify-end">
-        <button type="submit" className="btn btn-primary" disabled={pending}>
-          {pending ? (
-            <span
-              className="loading loading-dots loading-md"
-              aria-label="Saving changes..."
-            />
-          ) : (
-            "Save Changes"
-          )}
-        </button>
-      </div>
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="card-actions justify-end">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={pending}
+            >
+              {pending ? (
+                <span
+                  className="loading loading-dots loading-md"
+                  aria-label="Saving changes..."
+                />
+              ) : (
+                "Save Changes"
+              )}
+            </button>
+          </div>
+        }
+      >
+        Organization updated successfully!
+      </FormSuccessMessage>
     </Form>
   );
 }
@@ -509,26 +520,33 @@ function DeleteOrganizationForm({
 
       <FormErrors form={form} />
 
-      <div className="modal-action">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="btn btn-ghost"
-          disabled={pending}
-        >
-          Cancel
-        </button>
-        <button type="submit" className="btn btn-error" disabled={pending}>
-          {pending ? (
-            <span
-              className="loading loading-dots loading-md"
-              aria-label="Deleting organization..."
-            />
-          ) : (
-            "Delete Organization"
-          )}
-        </button>
-      </div>
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="modal-action">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="btn btn-ghost"
+              disabled={pending}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-error" disabled={pending}>
+              {pending ? (
+                <span
+                  className="loading loading-dots loading-md"
+                  aria-label="Deleting organization..."
+                />
+              ) : (
+                "Delete Organization"
+              )}
+            </button>
+          </div>
+        }
+      >
+        Organization deleted!
+      </FormSuccessMessage>
     </Form>
   );
 }
@@ -579,26 +597,33 @@ function LeaveOrganizationForm({
 
       <FormErrors form={form} />
 
-      <div className="modal-action">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="btn btn-ghost"
-          disabled={pending}
-        >
-          Cancel
-        </button>
-        <button type="submit" className="btn btn-error" disabled={pending}>
-          {pending ? (
-            <span
-              className="loading loading-dots loading-md"
-              aria-label="Leaving organization..."
-            />
-          ) : (
-            "Leave Organization"
-          )}
-        </button>
-      </div>
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="modal-action">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="btn btn-ghost"
+              disabled={pending}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-error" disabled={pending}>
+              {pending ? (
+                <span
+                  className="loading loading-dots loading-md"
+                  aria-label="Leaving organization..."
+                />
+              ) : (
+                "Leave Organization"
+              )}
+            </button>
+          </div>
+        }
+      >
+        You have left the organization.
+      </FormSuccessMessage>
     </Form>
   );
 }

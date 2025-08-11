@@ -9,9 +9,10 @@ import {
   type SubmissionResult,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { startTransition } from "react";
+import { memo, startTransition, useEffect, useState } from "react";
 import type { input, output, ZodType } from "zod/v4";
 
+import { Icon } from "@/components/icon";
 import { cn } from "@/lib/utils";
 
 export function useForm<Schema extends ZodType>({
@@ -206,3 +207,40 @@ export function FormErrors<Schema extends Record<string, unknown>>({
     </div>
   );
 }
+
+export type FormSuccessMessageProps = {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  lastResult: SubmissionResult | undefined;
+};
+
+export const FormSuccessMessage = memo<FormSuccessMessageProps>(
+  ({ children, fallback, lastResult }) => {
+    const [visible, setVisible] = useState(false);
+    const isSuccess = lastResult && lastResult.status !== "error";
+
+    useEffect(() => {
+      if (isSuccess) {
+        setVisible(true);
+        const timer = setTimeout(() => {
+          setVisible(false);
+        }, 3000);
+        return () => clearTimeout(timer);
+      } else {
+        setVisible(false);
+      }
+    }, [isSuccess, lastResult]);
+
+    const shouldShow = isSuccess && visible;
+    // const shouldShow = true;
+
+    if (!shouldShow) return fallback;
+
+    return (
+      <div className="alert alert-success px-4 py-1.5">
+        <Icon name="check-circle" className="h-6 w-6 shrink-0" />
+        <div>{children}</div>
+      </div>
+    );
+  }
+);

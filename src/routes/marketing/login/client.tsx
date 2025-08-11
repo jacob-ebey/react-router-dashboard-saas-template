@@ -5,7 +5,13 @@ import { useSearchParams } from "react-router";
 
 import { login } from "@/actions/auth/actions";
 import { LoginFormSchema } from "@/actions/auth/schema";
-import { Form, FormErrors, Input, useForm } from "@/components/form";
+import {
+  Form,
+  FormErrors,
+  FormSuccessMessage,
+  Input,
+  useForm,
+} from "@/components/form";
 
 export function LoginForm() {
   const [lastResult, action, pending] = useActionState(login, undefined);
@@ -45,18 +51,26 @@ export function LoginForm() {
         required
       />
       <FormErrors form={form} />
-      <div className="grid gap-1">
-        <button className="btn btn-primary" type="submit">
-          {pending ? (
-            <span
-              className="loading loading-dots loading-md"
-              aria-label="Logging in...."
-            />
-          ) : (
-            "Login"
-          )}
-        </button>
-      </div>
+
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="grid gap-1">
+            <button className="btn btn-primary" type="submit">
+              {pending ? (
+                <span
+                  className="loading loading-dots loading-md"
+                  aria-label="Logging in...."
+                />
+              ) : (
+                "Login"
+              )}
+            </button>
+          </div>
+        }
+      >
+        Login successful!
+      </FormSuccessMessage>
     </Form>
   );
 }

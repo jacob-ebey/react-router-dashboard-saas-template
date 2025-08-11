@@ -12,7 +12,13 @@ import {
   DeleteAccountSchema,
   UpdateNameSchema,
 } from "@/actions/profile/schema";
-import { Form, FormErrors, Input, useForm } from "@/components/form";
+import {
+  Form,
+  FormErrors,
+  FormSuccessMessage,
+  Input,
+  useForm,
+} from "@/components/form";
 import { Icon } from "@/components/icon";
 import { Card } from "@/components/ui/card";
 import type { User } from "@/db/schema";
@@ -90,28 +96,27 @@ function UpdateNameForm({ currentName }: { currentName: string | null }) {
             defaultValue={currentName || ""}
           />
 
-          <div className="card-actions">
-            <button className="btn btn-primary" type="submit">
-              {pending ? (
-                <span
-                  className="loading loading-dots loading-md"
-                  aria-label="Updating name..."
-                />
-              ) : (
-                "Update Name"
-              )}
-            </button>
-          </div>
-          {lastResult && lastResult.status !== "error" && (
-            <div className="alert alert-success">
-              <span>Name updated successfully!</span>
-            </div>
-          )}
-          {form.errors && (
-            <div id={form.errorId} className="alert alert-error">
-              <span>{form.errors}</span>
-            </div>
-          )}
+          <FormErrors form={form} />
+
+          <FormSuccessMessage
+            lastResult={lastResult}
+            fallback={
+              <div className="card-actions">
+                <button className="btn btn-primary" type="submit">
+                  {pending ? (
+                    <span
+                      className="loading loading-dots loading-md"
+                      aria-label="Updating name..."
+                    />
+                  ) : (
+                    "Update Name"
+                  )}
+                </button>
+              </div>
+            }
+          >
+            Name updated successfully!
+          </FormSuccessMessage>
         </Form>
       </div>
     </Card>
@@ -158,24 +163,27 @@ function ChangePasswordForm() {
             autoComplete="new-password"
           />
 
-          <div className="card-actions">
-            <button className="btn btn-primary" type="submit">
-              {pending ? (
-                <span
-                  className="loading loading-dots loading-md"
-                  aria-label="Changing password..."
-                />
-              ) : (
-                "Change Password"
-              )}
-            </button>
-          </div>
           <FormErrors form={form} />
-          {lastResult && lastResult.status !== "error" && (
-            <div className="alert alert-success">
-              <span>Password changed successfully!</span>
-            </div>
-          )}
+
+          <FormSuccessMessage
+            lastResult={lastResult}
+            fallback={
+              <div className="card-actions">
+                <button className="btn btn-primary" type="submit">
+                  {pending ? (
+                    <span
+                      className="loading loading-dots loading-md"
+                      aria-label="Changing password..."
+                    />
+                  ) : (
+                    "Change Password"
+                  )}
+                </button>
+              </div>
+            }
+          >
+            Password changed successfully!
+          </FormSuccessMessage>
         </Form>
       </div>
     </Card>
@@ -222,6 +230,7 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
                 deletion.
               </span>
             </div>
+
             <Input
               field={fields.email}
               label="Email Confirmation"
@@ -229,26 +238,35 @@ function DeleteAccountForm({ userEmail }: { userEmail: string }) {
               placeholder="Type your email to confirm"
               autoComplete="off"
             />
+
             <FormErrors form={form} />
-            <div className="card-actions gap-2">
-              <button
-                type="button"
-                className="btn"
-                onClick={() => setShowConfirmation(false)}
-              >
-                Cancel
-              </button>
-              <button className="btn btn-error" type="submit">
-                {pending ? (
-                  <span
-                    className="loading loading-dots loading-md"
-                    aria-label="Deleting account..."
-                  />
-                ) : (
-                  "Permanently Delete Account"
-                )}
-              </button>
-            </div>
+
+            <FormSuccessMessage
+              lastResult={lastResult}
+              fallback={
+                <div className="card-actions gap-2">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => setShowConfirmation(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button className="btn btn-error" type="submit">
+                    {pending ? (
+                      <span
+                        className="loading loading-dots loading-md"
+                        aria-label="Deleting account..."
+                      />
+                    ) : (
+                      "Permanently Delete Account"
+                    )}
+                  </button>
+                </div>
+              }
+            >
+              Account deleted successfully!
+            </FormSuccessMessage>
           </Form>
         )}
       </div>

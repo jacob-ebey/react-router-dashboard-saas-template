@@ -5,7 +5,13 @@ import { useSearchParams } from "react-router";
 
 import { signup } from "@/actions/auth/actions";
 import { SignupFormSchema } from "@/actions/auth/schema";
-import { Form, FormErrors, Input, useForm } from "@/components/form";
+import {
+  Form,
+  FormErrors,
+  FormSuccessMessage,
+  Input,
+  useForm,
+} from "@/components/form";
 
 export function SignupForm() {
   const [lastResult, action, pending] = useActionState(signup, undefined);
@@ -59,19 +65,28 @@ export function SignupForm() {
         autoComplete="new-password"
         required
       />
+
       <FormErrors form={form} />
-      <div className="grid gap-1">
-        <button className="btn btn-primary" type="submit">
-          {pending ? (
-            <span
-              className="loading loading-dots loading-md"
-              aria-label="Signing up...."
-            />
-          ) : (
-            "Signup"
-          )}
-        </button>
-      </div>
+
+      <FormSuccessMessage
+        lastResult={lastResult}
+        fallback={
+          <div className="grid gap-1">
+            <button className="btn btn-primary" type="submit">
+              {pending ? (
+                <span
+                  className="loading loading-dots loading-md"
+                  aria-label="Signing up...."
+                />
+              ) : (
+                "Signup"
+              )}
+            </button>
+          </div>
+        }
+      >
+        Signup successful!
+      </FormSuccessMessage>
     </Form>
   );
 }
