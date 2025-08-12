@@ -1,2 +1,4 @@
+packages:
+ - .
 onlyBuiltDependencies:
   - '@embedded-postgres/darwin-arm64'
