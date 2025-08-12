@@ -4,3 +4,4 @@ dist
 .data
 .env.*
 .vercel
+.env
