@@ -2,6 +2,7 @@
   "name": "react-router-dashboard-saas-template",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.14.0",
   "scripts": {
     "build": "vite build",
     "dev": "dotenv -- vite",
